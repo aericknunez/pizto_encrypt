@@ -2,7 +2,7 @@
 cd\
 cd C:\AppServ\www\pizto
 git reset --hard
-git pull https://github.com/aericknunez/pizto.git
+git pull https://github.com/aericknunez/pizto_encrypt.git
 
 cd\
 cd C:\AppServ\www\pizto\sync

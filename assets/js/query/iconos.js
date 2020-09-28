@@ -85,6 +85,22 @@ return false;
 
 
 
+    $("body").on("click","#obtenericonos",function(){
+
+        $.ajax({
+            type: "POST",
+            url: "application/api/get_imagenes.php",
+            beforeSend: function () {
+              $('#obtenericonos').html('<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').addClass('disabled');
+            },
+            success: function(data) {            
+                $('#obtenericonos').html('<i class="fas fa-sync"></i> Cargar Iconos').removeClass('disabled');	 
+                $("#cantidadiconos").load('application/src/routes.php?op=93');
+            }
+        });
+    });                 
+
+
 
 
 

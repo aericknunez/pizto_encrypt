@@ -6,8 +6,7 @@ $(function () {
 })
 
 
-    $("body").on("click","#venta",function(){ 
-        
+    $("body").on("click","#venta",function(){       
 		var op = $(this).attr('op');
 		var cod = $(this).attr('cod');
 		var mesa = $(this).attr('mesa');
@@ -32,24 +31,24 @@ $(function () {
 
 
     $("body").on("click","#ventaopcion",function(){ 
-        
-		var op = $(this).attr('op');
-		var cod = $(this).attr('cod');
-		var mesa = $(this).attr('mesa');
-		var cliente = $(this).attr('cliente');
-		var opcion = $(this).attr('opcion');
-		var panel = $(this).attr('panel');
-        var dataString = 'op='+op+'&cod='+cod+'&mesa='+mesa+'&panel='+panel+'&cliente='+cliente+'&opcion='+opcion;
+        var op = $(this).attr('op');
+        var cod = $(this).attr('cod');
+        var mesa = $(this).attr('mesa');
+        var panel = $(this).attr('panel');
+        var cliente = $(this).attr('cliente');
+        var dataString = 'op='+op+'&cod='+cod+'&mesa='+mesa+'&panel='+panel+'&cliente='+cliente;
 
         $.ajax({
             type: "POST",
             url: "application/src/routes.php",
             data: dataString,
             success: function(data) {   
-                $("#ventana").html(data);            
+                $("#lateral").load('application/src/routes.php?op=22');         
+                MuestraOpciones(data);   // activar para seleccionar las opciones    
             }
         });       
     });
+
 
 
 
@@ -285,6 +284,62 @@ $(function () {
 
 
 
+
+/// mostrar modal para opciones del platillo
+
+function MuestraOpciones(datos){
+       
+       datos = JSON.parse(datos);
+
+        $('#ModalOpciones').modal('show');
+        var dataString = 'op=18&producto='+datos.producto+'&codigo='+datos.codigo+'&identificador='+datos.identificador;
+
+        $.ajax({
+            type: "POST",
+            url: "application/src/routes.php",
+            data: dataString,
+            beforeSend: function () {
+               $("#vista_opcion").html('<div class="row justify-content-md-center" ><img src="assets/img/load.gif" alt=""></div>');
+            },
+            success: function(data) {            
+                $("#vista_opcion").html(data); // lo que regresa de la busquea         
+            }
+        });
+ 
+}
+
+
+    $("body").on("click","#addopcion",function(){ 
+        
+        $('#ModalOpciones').modal('hide');
+       
+        var codigo = $(this).attr('codigo');
+        var identificador = $(this).attr('identificador');
+        var op = $(this).attr('op');
+        var opcion = $(this).attr('opcion');
+        var producto = $(this).attr('producto');
+        var dataString = 'op='+op+'&codigo='+codigo+'&identificador='+identificador+'&opcion='+opcion+'&producto='+producto;
+
+        $.ajax({
+            type: "POST",
+            url: "application/src/routes.php",
+            data: dataString,
+            beforeSend: function () {
+               $("#vista_opcion").html('<div class="row justify-content-md-center" ><img src="assets/img/load.gif" alt=""></div>');
+            },
+            success: function(data) {  
+
+            datos = JSON.parse(data);
+
+                if(datos.mensaje != "Vacio"){ 
+                    MuestraOpciones(data); // lo que regresa de la busquea         
+                } else {
+                   $("#vista_opcion").html(data);
+                   $("#lateral").load('application/src/routes.php?op=22'); 
+                }      
+            }
+        });       
+    });
 
 
 

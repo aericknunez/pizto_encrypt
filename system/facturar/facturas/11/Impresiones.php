@@ -9,8 +9,8 @@ class Impresiones{
   $db = new dbConn();
 
 $img  = "mandala.bmp";
-$txt1   = "35"; 
-$txt2   = "15";
+$txt1   = "31"; 
+$txt2   = "11";
 $txt3   = "0";
 $txt4   = "0";
 $n1   = "40";
@@ -21,11 +21,11 @@ $n4   = "0";
 
 $col1 = 0;
 $col2 = 30;
-$col3 = 365;
-$col4 = 465;
-$col5 = 532;
+$col3 = 340;
+$col4 = 440;
+$col5 = 500;
 // $print
-$print = "EPSON TM-T20II Receipt";
+$print = "LR2000";
 $logo_imagen="C:/AppServ/www/pizto/assets/img/logo_factura/". $img;
 
 
@@ -36,7 +36,7 @@ printer_set_option($handle, PRINTER_MODE, "RAW");
 printer_start_doc($handle, "Mi Documento");
 printer_start_page($handle);
 
-printer_draw_bmp($handle, $logo_imagen, 70, 1, 450, 300);
+printer_draw_bmp($handle, $logo_imagen, 35, 1, 450, 300);
 
 $font = printer_create_font("Arial", $txt1, $txt2, PRINTER_FW_NORMAL, false, false, false, 0);
 printer_select_font($handle, $font);
@@ -45,10 +45,10 @@ printer_select_font($handle, $font);
 
 $oi=350;
 //// comienza la factura
-printer_draw_text($handle, $_SESSION['config_cliente'], 110, $oi);
 
+printer_draw_text($handle, "Plaza Constitucion, Local # 16, Fte A", 25, $oi);
 $oi=$oi+$n1;
-printer_draw_text($handle, $_SESSION['config_direccion'], 0, $oi);
+printer_draw_text($handle, "Parque central de Metapan", 65, $oi);
 // $oi=$oi+$n1;
 // printer_draw_text($handle, Helpers::Pais($_SESSION['config_pais']), 0, $oi);
 // $oi=$oi+$n1;
@@ -103,25 +103,12 @@ if ($sx = $db->select("sum(total)", "ticket_temp", "WHERE mesa = '".$numero."'  
           printer_draw_text($handle, $b["pv"], $col3, $oi);
           printer_draw_text($handle, $stotal, $col4, $oi);
 
-          $g="G";
 
-          printer_draw_text($handle, $g, $col5, $oi);
 ////
 $subtotalf = $subtotalf + $stotal;
 ///
 
     }    $a->close();
-
-
-$oi=$oi+$n3+$n1;
-printer_draw_text($handle, "Sub Total " . $_SESSION['config_moneda_simbolo'] . ":", 185, $oi);
-printer_draw_text($handle, Helpers::Format(Helpers::STotal($subtotalf, $_SESSION['config_imp'])), $col4, $oi);
-
-
-$oi=$oi+$n1;
-printer_draw_text($handle, "15% Impu. " . $_SESSION['config_moneda_simbolo'] . ":", 175, $oi);
-printer_draw_text($handle, Helpers::Format(Helpers::Impuesto(Helpers::STotal($subtotalf, $_SESSION['config_imp']), $_SESSION['config_imp'])), $col4, $oi);
-
 
 
 if($_SESSION['config_propina'] != 0.00){ ///  prara agregarle la propina -- sino borrar
@@ -155,10 +142,6 @@ printer_draw_text($handle, Helpers::Format($cambios), $col4, $oi);
 $oi=$oi+$n2;
 printer_draw_text($handle, "___________________________________", 0, $oi);
 
-$oi=$oi+$n1;
-printer_draw_text($handle, "G=Articulo Gravado  E= Artculo Exento", 0, $oi);
-
-
 
 $oi=$oi+$n1;
 printer_draw_text($handle, $fechaf, 100, $oi);
@@ -177,6 +160,8 @@ $oi=$oi+$n1+$n2;
 printer_draw_text($handle, ".", NULL, $oi);
 printer_write($handle, chr(27).chr(112).chr(48).chr(55).chr(121)); //enviar pulso
 
+$oi=$oi+$n1;
+printer_draw_text($handle, ".", 0, $oi);
 
 ///
 printer_end_page($handle);
@@ -207,7 +192,7 @@ $n3   = "21";
 $n4   = "10";
 
 // $print
-$print = "EPSON TM-T20II Receipt";
+$print = "LR2000";
 
 
 
@@ -483,8 +468,8 @@ printer_close($handle);
 
 
 $img  = "mandala.bmp";
-$txt1   = "35"; 
-$txt2   = "15";
+$txt1   = "31"; 
+$txt2   = "11";
 $txt3   = "0";
 $txt4   = "0";
 $n1   = "40";
@@ -495,11 +480,11 @@ $n4   = "0";
 
 $col1 = 0;
 $col2 = 30;
-$col3 = 365;
-$col4 = 465;
-$col5 = 532;
+$col3 = 340;
+$col4 = 440;
+$col5 = 500;
 // $print
-$print = "EPSON TM-T20II Receipt";
+$print = "LR2000";
 $logo_imagen="C:/AppServ/www/pizto/assets/img/logo_factura/". $img;
 
 
@@ -510,7 +495,7 @@ printer_set_option($handle, PRINTER_MODE, "RAW");
 printer_start_doc($handle, "Mi Documento");
 printer_start_page($handle);
 
-printer_draw_bmp($handle, $logo_imagen, 70, 1, 450, 300);
+printer_draw_bmp($handle, $logo_imagen, 35, 1, 450, 300);
 
 $font = printer_create_font("Arial", $txt1, $txt2, PRINTER_FW_NORMAL, false, false, false, 0);
 printer_select_font($handle, $font);
@@ -519,10 +504,10 @@ printer_select_font($handle, $font);
 
 $oi=350;
 //// comienza la factura
-printer_draw_text($handle, $_SESSION['config_cliente'], 110, $oi);
 
+printer_draw_text($handle, "Plaza Constitucion, Local # 16, Fte A", 25, $oi);
 $oi=$oi+$n1;
-printer_draw_text($handle, $_SESSION['config_direccion'], 0, $oi);
+printer_draw_text($handle, "Parque central de Metapan", 65, $oi);
 // $oi=$oi+$n1;
 // printer_draw_text($handle, Helpers::Pais($_SESSION['config_pais']), 0, $oi);
 // $oi=$oi+$n1;
@@ -577,25 +562,12 @@ if ($sx = $db->select("sum(total)", "ticket_temp", "WHERE mesa = '".$numero."'  
           printer_draw_text($handle, $b["pv"], $col3, $oi);
           printer_draw_text($handle, $stotal, $col4, $oi);
 
-          $g="G";
 
-          printer_draw_text($handle, $g, $col5, $oi);
 ////
 $subtotalf = $subtotalf + $stotal;
 ///
 
     }    $a->close();
-
-
-$oi=$oi+$n3+$n1;
-printer_draw_text($handle, "Sub Total " . $_SESSION['config_moneda_simbolo'] . ":", 185, $oi);
-printer_draw_text($handle, Helpers::Format(Helpers::STotal($subtotalf, $_SESSION['config_imp'])), $col4, $oi);
-
-
-$oi=$oi+$n1;
-printer_draw_text($handle, "15% Impu. " . $_SESSION['config_moneda_simbolo'] . ":", 175, $oi);
-printer_draw_text($handle, Helpers::Format(Helpers::Impuesto(Helpers::STotal($subtotalf, $_SESSION['config_imp']), $_SESSION['config_imp'])), $col4, $oi);
-
 
 
 if($_SESSION['config_propina'] != 0.00){ ///  prara agregarle la propina -- sino borrar
@@ -629,10 +601,6 @@ printer_draw_text($handle, Helpers::Format($cambios), $col4, $oi);
 $oi=$oi+$n2;
 printer_draw_text($handle, "___________________________________", 0, $oi);
 
-$oi=$oi+$n1;
-printer_draw_text($handle, "G=Articulo Gravado  E= Artculo Exento", 0, $oi);
-
-
 
 $oi=$oi+$n1;
 printer_draw_text($handle, $fechaf, 100, $oi);
@@ -651,6 +619,8 @@ $oi=$oi+$n1+$n2;
 printer_draw_text($handle, ".", NULL, $oi);
 printer_write($handle, chr(27).chr(112).chr(48).chr(55).chr(121)); //enviar pulso
 
+$oi=$oi+$n1;
+printer_draw_text($handle, ".", 0, $oi);
 
 ///
 printer_end_page($handle);
@@ -674,17 +644,17 @@ printer_close($handle);
   $db = new dbConn();
 
 $img  = "logo.bmp";
-$txt1   = "40"; 
-$txt2   = "18";
-$txt3   = "30";
-$txt4   = "18";
+$txt1   = "35"; 
+$txt2   = "13";
+$txt3   = "28";
+$txt4   = "16";
 $n1   = "50";
-$n2   = "100";
-$n3   = "150";
+$n2   = "90";
+$n3   = "120";
 $n4   = "0";
 
 // $print
-$print = "EPSON TM-T20II Receipt";
+$print = "LR2000";
 
 
 $handle = printer_open($print);
@@ -698,7 +668,7 @@ $font = printer_create_font("Arial", $txt1, $txt2, PRINTER_FW_NORMAL, false, fal
 printer_select_font($handle, $font);
 
 
-$oi="140";
+$oi="60";
 printer_draw_text($handle, "COMANDA DE COCINA", 100, $oi);
 
 
@@ -754,12 +724,14 @@ printer_select_font($handle, $font);
 
 $oi=$oi+$n2;
 printer_draw_text($handle, date("d-m-Y"), 0, $oi);
-printer_draw_text($handle, date("H:i:s"), 400, $oi);
+printer_draw_text($handle, date("H:i:s"), 350, $oi);
 
 
 $oi=$oi+$n1;
 printer_draw_text($handle, "Cajero: " . $_SESSION['nombre'], 25, $oi);
 
+$oi=$oi+$n1;
+printer_draw_text($handle, ".", 25, $oi);
 
 printer_write($handle, chr(27).chr(112).chr(48).chr(55).chr(121)); //enviar pulso
 
@@ -914,7 +886,7 @@ $oi=$oi+$n2;
 
  public function AbrirCaja(){
  // $print
-	$print = "EPSON TM-T20II Receipt";
+	$print = "LR2000";
 	
     $handle = printer_open($print);
     printer_set_option($handle, PRINTER_MODE, "RAW");
