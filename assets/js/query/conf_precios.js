@@ -105,6 +105,89 @@ return false;
 
 
 
+//// modal icono
+	$("body").on("click","#c_icono",function(){ 
+
+		$('#ModalIconos').modal('show');
+		var cod = $(this).attr('cod');
+		var pro = $(this).attr('pro');
+		var img = $(this).attr('img');
+
+		$("#pro_ic").html('<h3 class="row justify-content-md-center" >'+pro+'</h3>');
+		$("#img-ico").html('<img src="'+img+'" alt="Icono del producto" class="img-fluid">');
+		$("#codigo").attr("value",cod);
+
+		$("#vericonos").attr("codigox",cod); // boton
+
+	});
+    
+
+
+//////agregar imagen
+    $("#btn-img").click(function (event) {
+        event.preventDefault();
+        var form = $('#form-img')[0];
+        var data = new FormData(form);
+        var iden = $(this).attr('codigo');
+
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: "application/src/routes.php?op=315",
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            beforeSend: function () {
+                $('#btn-img').html('<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').addClass('disabled');
+            },
+            success: function (data) {
+                $('#btn-img').html('Subir Imagen').removeClass('disabled');
+                $("#form-img").trigger("reset");
+                $("#precio_ver").html(data);
+            },
+        });
+        $('#ModalIconos').modal('hide');
+    });
+
+
+
+//// modal icono
+	$("body").on("click","#vericonos",function(){ 
+
+		$('#ModalIconosTodos').modal('show');
+		$('#ModalIconos').modal('hide');
+		var cod = $(this).attr("codigox");
+
+		$("a").attr("codigos", cod);
+
+	});
+    
+
+
+
+	$("body").on("click","#cambioimg",function(){ 
+
+		var codigos = $(this).attr('codigos');
+		var imagen = $(this).attr('imagen');
+		var dataString = 'op=316&codigos='+codigos+'&imagen='+imagen;
+
+		$.ajax({
+            type: "POST",
+            url: "application/src/routes.php",
+            data: dataString,
+            success: function(data) {            
+                $("#precio_ver").html(data); 		
+            }
+        });
+         $('#ModalIconosTodos').modal('hide');
+	});
+    
+
+
+
+
 
 
 

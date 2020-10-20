@@ -79,12 +79,13 @@ $subtotalf = 0;
 
 
 
-$a = $db->query("select cod, cant, producto, pv, total, fecha, hora from ticket_temp where mesa = '".$numero."' $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]." group by cod");
+$a = $db->query("select cod, cant, producto, pv, total, fecha, hora, num_fac from ticket_temp where mesa = '".$numero."' $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]." group by cod");
   
     foreach ($a as $b) {
  
  $fechaf=$b["fecha"];
  $horaf=$b["hora"];
+ $num_fac=$b["num_fac"];
 
 
 /// para hacer las sumas
@@ -156,12 +157,14 @@ $oi=$oi+$n1+$n4;
 printer_draw_text($handle, "GRACIAS POR SU COMPRA...", 50, $oi);
 printer_delete_font($font);
 
+
 $oi=$oi+$n1+$n2;
-printer_draw_text($handle, ".", NULL, $oi);
-printer_write($handle, chr(27).chr(112).chr(48).chr(55).chr(121)); //enviar pulso
+printer_draw_text($handle, "REF: ". $num_fac, NULL, $oi);
 
 $oi=$oi+$n1;
 printer_draw_text($handle, ".", 0, $oi);
+
+printer_write($handle, chr(27).chr(112).chr(48).chr(55).chr(121)); //enviar pulso
 
 ///
 printer_end_page($handle);
@@ -617,10 +620,11 @@ printer_delete_font($font);
 
 $oi=$oi+$n1+$n2;
 printer_draw_text($handle, ".", NULL, $oi);
-printer_write($handle, chr(27).chr(112).chr(48).chr(55).chr(121)); //enviar pulso
 
 $oi=$oi+$n1;
 printer_draw_text($handle, ".", 0, $oi);
+
+// printer_write($handle, chr(27).chr(112).chr(48).chr(55).chr(121)); //enviar pulso
 
 ///
 printer_end_page($handle);
@@ -733,7 +737,7 @@ printer_draw_text($handle, "Cajero: " . $_SESSION['nombre'], 25, $oi);
 $oi=$oi+$n1;
 printer_draw_text($handle, ".", 25, $oi);
 
-printer_write($handle, chr(27).chr(112).chr(48).chr(55).chr(121)); //enviar pulso
+// printer_write($handle, chr(27).chr(112).chr(48).chr(55).chr(121)); //enviar pulso
 
 
 printer_end_page($handle);
@@ -885,9 +889,9 @@ $oi=$oi+$n2;
 
 
  public function AbrirCaja(){
- // $print
-	$print = "LR2000";
-	
+// $print
+$print = "LR2000";
+
     $handle = printer_open($print);
     printer_set_option($handle, PRINTER_MODE, "RAW");
 
