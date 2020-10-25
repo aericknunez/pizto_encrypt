@@ -46,9 +46,9 @@ printer_select_font($handle, $font);
 $oi=350;
 //// comienza la factura
 
-printer_draw_text($handle, "Plaza Constitucion, Local # 16, Fte A", 25, $oi);
+printer_draw_text($handle, "4ta Calle Pte y 3ra Av Sur, Calle Valiente", 5, $oi);
 $oi=$oi+$n1;
-printer_draw_text($handle, "Parque central de Metapan", 65, $oi);
+printer_draw_text($handle, "Metapan", 200, $oi);
 // $oi=$oi+$n1;
 // printer_draw_text($handle, Helpers::Pais($_SESSION['config_pais']), 0, $oi);
 // $oi=$oi+$n1;
@@ -68,7 +68,7 @@ printer_draw_text($handle, "Descripcion", $col2, $oi);
 printer_draw_text($handle, "P/U", $col3, $oi);
 printer_draw_text($handle, "Total", $col4, $oi);
 
-$oi=$oi+$n1+$n3;
+$oi=$oi+25;
 printer_draw_text($handle, "____________________________________", 0, $oi);
 
 
@@ -155,7 +155,6 @@ printer_draw_text($handle, "Cajero: " . $_SESSION['nombre'], 25, $oi);
 
 $oi=$oi+$n1+$n4;
 printer_draw_text($handle, "GRACIAS POR SU COMPRA...", 50, $oi);
-printer_delete_font($font);
 
 
 $oi=$oi+$n1+$n2;
@@ -166,6 +165,7 @@ printer_draw_text($handle, ".", 0, $oi);
 
 printer_write($handle, chr(27).chr(112).chr(48).chr(55).chr(121)); //enviar pulso
 
+printer_delete_font($font);
 ///
 printer_end_page($handle);
 printer_end_doc($handle);
@@ -470,7 +470,7 @@ printer_close($handle);
   $db = new dbConn();
 
 
-$img  = "mandala.bmp";
+$img  = "salsaycurtido.bmp";
 $txt1   = "31"; 
 $txt2   = "11";
 $txt3   = "0";
@@ -508,9 +508,9 @@ printer_select_font($handle, $font);
 $oi=350;
 //// comienza la factura
 
-printer_draw_text($handle, "Plaza Constitucion, Local # 16, Fte A", 25, $oi);
+printer_draw_text($handle, "4ta Calle Pte y 3ra Av Sur, Calle Valiente", 5, $oi);
 $oi=$oi+$n1;
-printer_draw_text($handle, "Parque central de Metapan", 65, $oi);
+printer_draw_text($handle, "Metapan", 200, $oi);
 // $oi=$oi+$n1;
 // printer_draw_text($handle, Helpers::Pais($_SESSION['config_pais']), 0, $oi);
 // $oi=$oi+$n1;
@@ -521,6 +521,26 @@ $oi=$oi+$n1;
 printer_draw_text($handle, "Tel: " . $_SESSION['config_telefono'], 0, $oi);
 
 
+/// para obtener la direccion del cliente
+    if ($r = $db->select("cliente", "clientes_mesa", "WHERE mesa = ".$_SESSION['mesa']." and  tx = ".$_SESSION['tx']." and td = ".$_SESSION['td']."")) { 
+        $client = $r["cliente"];
+    } unset($r);  
+
+if($client != NULL){
+    if ($r = $db->select("nombre, direccion", "clientes", "WHERE hash = '".$client."' and td = ".$_SESSION['td']."")) { 
+        $nombre = $r["nombre"];
+        $direcion = $r["direccion"];
+    } unset($r); 	
+
+$oi=$oi+$n1;
+printer_draw_text($handle, "Cliente: " . $nombre, 25, $oi);
+
+$oi=$oi+$n1;
+printer_draw_text($handle, $direcion, 25, $oi);
+
+
+}
+/// termina cliente
 
 $oi=$oi+$n2;
 printer_draw_text($handle, "____________________________________", 0, $oi);
@@ -530,7 +550,7 @@ printer_draw_text($handle, "Descripcion", $col2, $oi);
 printer_draw_text($handle, "P/U", $col3, $oi);
 printer_draw_text($handle, "Total", $col4, $oi);
 
-$oi=$oi+$n1+$n3;
+$oi=$oi+25;
 printer_draw_text($handle, "____________________________________", 0, $oi);
 
 
@@ -616,16 +636,17 @@ printer_draw_text($handle, "Cajero: " . $_SESSION['nombre'], 25, $oi);
 
 $oi=$oi+$n1+$n4;
 printer_draw_text($handle, "GRACIAS POR SU COMPRA...", 50, $oi);
-printer_delete_font($font);
 
 $oi=$oi+$n1+$n2;
-printer_draw_text($handle, ".", NULL, $oi);
+printer_draw_text($handle, "REF: ". $num_fac, NULL, $oi);
 
 $oi=$oi+$n1;
 printer_draw_text($handle, ".", 0, $oi);
 
+
 // printer_write($handle, chr(27).chr(112).chr(48).chr(55).chr(121)); //enviar pulso
 
+printer_delete_font($font);
 ///
 printer_end_page($handle);
 printer_end_doc($handle);
@@ -733,6 +754,28 @@ printer_draw_text($handle, date("H:i:s"), 350, $oi);
 
 $oi=$oi+$n1;
 printer_draw_text($handle, "Cajero: " . $_SESSION['nombre'], 25, $oi);
+
+/// para obtener la direccion del cliente
+    if ($r = $db->select("cliente", "clientes_mesa", "WHERE mesa = ".$_SESSION['mesa']." and  tx = ".$_SESSION['tx']." and td = ".$_SESSION['td']."")) { 
+        $client = $r["cliente"];
+    } unset($r);  
+
+if($client != NULL){
+    if ($r = $db->select("nombre, direccion", "clientes", "WHERE hash = '".$client."' and td = ".$_SESSION['td']."")) { 
+        $nombre = $r["nombre"];
+        $direcion = $r["direccion"];
+    } unset($r); 	
+
+$oi=$oi+$n1;
+printer_draw_text($handle, "Cliente: " . $nombre, 25, $oi);
+
+$oi=$oi+$n1;
+printer_draw_text($handle, $direcion, 25, $oi);
+
+
+}
+/// termina cliente
+
 
 $oi=$oi+$n1;
 printer_draw_text($handle, ".", 25, $oi);
