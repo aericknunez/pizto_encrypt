@@ -133,25 +133,32 @@ printer_close($handle);
 
 
 
-
-
-
-
-
  public function Factura($efectivo, $numero){
+
+  $this->Ticket($efectivo, $numero);
+  $this->Facturax($efectivo, $numero);
+
+
+ }
+
+
+
+
+ public function Facturax($efectivo, $numero){
   $db = new dbConn();
+
 
 $txt1 	= "17"; 
 $txt2 	= "10";
 $txt3 	= "15";
 $txt4 	= "8";
-$n1 	= "30";
-$n2 	= "45";
+$n1 	= "18";
+$n2 	= "14";
 $n3 	= "21";
 $n4 	= "10";
 
 // $print
-$print = "EPSON TM-T20II Receipt";
+$print = "EPSON TM-U220 Receipt";
 
 
 
