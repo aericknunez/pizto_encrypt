@@ -8,7 +8,7 @@ class Impresiones{
  public function Ticket($efectivo, $numero){
   $db = new dbConn();
 
-$img  = "mandala.bmp";
+$img  = "bbtotra.bmp";
 $txt1   = "31"; 
 $txt2   = "11";
 $txt3   = "0";
@@ -470,7 +470,7 @@ printer_close($handle);
   $db = new dbConn();
 
 
-$img  = "mandala.bmp";
+$img  = "bbtotra.bmp";
 $txt1   = "31"; 
 $txt2   = "11";
 $txt3   = "0";
