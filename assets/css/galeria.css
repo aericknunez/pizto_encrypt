@@ -203,6 +203,15 @@
     border-radius: 0.2rem !important;
 }
 
+.menu-title2 { /*para productos y no para categorias*/
+    padding: 1px;
+    text-align: center;
+    font-size: 80%;
+    background: #002061;
+    color: #FFFFFF;
+    border-radius: 0.2rem !important;
+}
+
 .menu-titleC {
     padding: 1px;
     text-align: center;
