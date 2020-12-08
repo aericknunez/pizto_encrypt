@@ -136,8 +136,9 @@ $subtotalf = $subtotalf + $stotal;
 
 
 
-    if ($r = $db->select("efectivo", "ticket_propina", "WHERE num_fac = '".$numero."' and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
-        $propina = $r["efectivo"];
+
+    if ($r = $db->select("total", "ticket_propina", "WHERE num_fac = '".$numero."' and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
+        $propina = $r["total"];
     } unset($r); 
 
 
@@ -148,14 +149,14 @@ printer_draw_text($handle, Helpers::Format($subtotalf), $col4, $oi);
 
 if($propina > 0.00){ ///  prara agregarle la propina -- sino borrar
 $oi=$oi+$n2;
-printer_draw_text($handle, "Propina:", 232, $oi);
+printer_draw_text($handle, "Propina " . $_SESSION['config_moneda_simbolo'] . ":", 232, $oi);
 printer_draw_text($handle, Helpers::Format($propina),$col4, $oi);
-$subtotalf = Helpers::PropinaTotal($subtotalf);
 }
 
 $oi=$oi+$n1;
 printer_draw_text($handle, "Total " . $_SESSION['config_moneda_simbolo'] . ":", 232, $oi);
-printer_draw_text($handle, Helpers::Format($subtotalf), $col4, $oi);
+printer_draw_text($handle, Helpers::Format($subtotalf + $propina), $col4, $oi);
+
 
 $oi=$oi+$n2;
 printer_draw_text($handle, "____________________________________", 0, $oi);
@@ -635,6 +636,7 @@ $subtotalf = $subtotalf + $stotal;
 ///
 
     }    $a->close();
+
 
 $oi=$oi+$n1;
 printer_draw_text($handle, "Sub Total " . $_SESSION['config_moneda_simbolo'] . ":", 232, $oi);

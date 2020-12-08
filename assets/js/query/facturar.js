@@ -138,5 +138,47 @@ return false;
 
 
 
+	$('#btn-propina').click(function(e){ /// para el formulario agregar rtn
+		e.preventDefault();
+		$.ajax({
+			url: "application/src/routes.php?op=69",
+			method: "POST",
+			data: $("#form-propina").serialize(),
+			success: function(data){
+				$("#resultado").html(data);
+				$("#form-propina").trigger("reset");
+			}
+		})
+	})
+$("#form-propina").keypress(function(e) {//Para deshabilitar el uso de la tecla "Enter"
+if (e.which == 13) {
+return false;
+}
+});
+
+
+
+	$('#btn-borrrarelemento').click(function(e){ /// 
+		e.preventDefault();
+		$.ajax({
+			url: "application/src/routes.php?op=79",
+			method: "POST",
+			data: $("#form-borrrarelemento").serialize(),
+			success: function(data){
+				$("#resultado").html(data);
+				$("#form-borrrarelemento").trigger("reset");
+			}
+		})
+	})
+$("#form-borrrarelemento").keypress(function(e) {//Para deshabilitar el uso de la tecla "Enter"
+if (e.which == 13) {
+return false;
+}
+});
+
+
+
+
+
 
 });

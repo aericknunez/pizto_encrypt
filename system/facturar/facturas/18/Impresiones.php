@@ -9,7 +9,7 @@ class Impresiones{
  public function Ticket($efectivo, $numero){
   $db = new dbConn();
 
-$img  = "hotpozza.bmp";
+$img  = "hotpizza.bmp";
 $txt1   = "31"; 
 $txt2   = "11";
 $txt3   = "0";
@@ -26,7 +26,7 @@ $col3 = 340;
 $col4 = 440;
 $col5 = 500;
 // $print
-$print = "LR2000";
+$print = "TICKET";
 $logo_imagen="C:/AppServ/www/pizto/assets/img/logo_factura/". $img;
 
 
@@ -49,9 +49,9 @@ $oi=350;
 
 
 
-printer_draw_text($handle, "Km 35 carretera panamericana", 5, $oi);
+printer_draw_text($handle, "Residencial Madrid Pol 39, Casa 1", 5, $oi);
 $oi=$oi+$n1;
-printer_draw_text($handle, "Cojutepeque", 200, $oi);
+printer_draw_text($handle, "Ciudad Real", 200, $oi);
 // $oi=$oi+$n1;
 // printer_draw_text($handle, Helpers::Pais($_SESSION['config_pais']), 0, $oi);
 // $oi=$oi+$n1;
@@ -59,7 +59,7 @@ printer_draw_text($handle, "Cojutepeque", 200, $oi);
 // $oi=$oi+$n1;
 // printer_draw_text($handle, $_SESSION['config_nombre_documento'] . ": " . $_SESSION['config_nit'], 0, $oi);
 $oi=$oi+$n1;
-printer_draw_text($handle, "Tel: 2313-4541", 0, $oi);
+printer_draw_text($handle, "Tel: 7659-2747", 0, $oi);
 
 $oi=$oi+$n1;
 printer_draw_text($handle, "FACTURA NUMERO: " . $numero, NULL, $oi);
@@ -117,21 +117,28 @@ $subtotalf = $subtotalf + $stotal;
 
 
 
-    if ($r = $db->select("efectivo", "ticket_propina", "WHERE num_fac = '".$numero."' and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
-        $propina = $r["efectivo"];
+
+    if ($r = $db->select("total", "ticket_propina", "WHERE num_fac = '".$numero."' and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
+        $propina = $r["total"];
     } unset($r); 
+
+
+$oi=$oi+$n1;
+printer_draw_text($handle, "Sub Total " . $_SESSION['config_moneda_simbolo'] . ":", 232, $oi);
+printer_draw_text($handle, Helpers::Format($subtotalf), $col4, $oi);
 
 
 if($propina > 0.00){ ///  prara agregarle la propina -- sino borrar
 $oi=$oi+$n2;
-printer_draw_text($handle, "Propina:", 232, $oi);
+printer_draw_text($handle, "Propina " . $_SESSION['config_moneda_simbolo'] . ":", 232, $oi);
 printer_draw_text($handle, Helpers::Format($propina),$col4, $oi);
-$subtotalf = Helpers::PropinaTotal($subtotalf);
 }
 
 $oi=$oi+$n1;
 printer_draw_text($handle, "Total " . $_SESSION['config_moneda_simbolo'] . ":", 232, $oi);
-printer_draw_text($handle, Helpers::Format($subtotalf), $col4, $oi);
+printer_draw_text($handle, Helpers::Format($subtotalf + $propina), $col4, $oi);
+
+
 
 $oi=$oi+$n2;
 printer_draw_text($handle, "____________________________________", 0, $oi);
@@ -482,7 +489,7 @@ printer_close($handle);
   $db = new dbConn();
 
 
-$img  = "hotpozza.bmp";
+$img  = "hotpizza.bmp";
 $txt1   = "31"; 
 $txt2   = "11";
 $txt3   = "0";
@@ -499,7 +506,7 @@ $col3 = 340;
 $col4 = 440;
 $col5 = 500;
 // $print
-$print = "LR2000";
+$print = "TICKET";
 $logo_imagen="C:/AppServ/www/pizto/assets/img/logo_factura/". $img;
 
 
@@ -521,9 +528,9 @@ $oi=350;
 //// comienza la factura
 
 
-printer_draw_text($handle, "Km 35 carretera panamericana", 5, $oi);
+printer_draw_text($handle, "Residencial Madrid Pol 39, Casa 1", 5, $oi);
 $oi=$oi+$n1;
-printer_draw_text($handle, "Cojutepeque", 200, $oi);
+printer_draw_text($handle, "Ciudad Real", 200, $oi);
 // $oi=$oi+$n1;
 // printer_draw_text($handle, Helpers::Pais($_SESSION['config_pais']), 0, $oi);
 // $oi=$oi+$n1;
@@ -531,7 +538,7 @@ printer_draw_text($handle, "Cojutepeque", 200, $oi);
 // $oi=$oi+$n1;
 // printer_draw_text($handle, $_SESSION['config_nombre_documento'] . ": " . $_SESSION['config_nit'], 0, $oi);
 $oi=$oi+$n1;
-printer_draw_text($handle, "Tel: 2313-4541", 0, $oi);
+printer_draw_text($handle, "Tel: 7659-2747", 0, $oi);
 
 $oi=$oi+$n1;
 printer_draw_text($handle, "ORDEN NUMERO: ". $numero, NULL, $oi);
@@ -671,6 +678,7 @@ printer_draw_text($handle, ".", 0, $oi);
 
 
 // printer_write($handle, chr(27).chr(112).chr(48).chr(55).chr(121)); //enviar pulso
+
 printer_delete_font($font);
 
 ///
@@ -723,7 +731,7 @@ $col3 = 340;
 $col4 = 440;
 $col5 = 500;
 // $print
-$print = "LR2000";
+$print = "COCINA";
 // 
 
 
@@ -875,12 +883,12 @@ $col4 = 440;
 $col5 = 500;
 // $print
 
-$print = "LR2000";
+$print = "TICKET";
 
 
 $a = $db->query("select ticket_temp.cod as cod, ticket_temp.hash as hash, ticket_temp.cant as cant, ticket_temp.producto as producto, control_cocina.cod as codigo  
   FROM ticket_temp, control_panel_mostrar, control_cocina 
-  WHERE ticket_temp.mesa = '".$_SESSION["mesa"]."' and ticket_temp.tx = ".$_SESSION["tx"]." and ticket_temp.td = ".$_SESSION["td"]." and control_panel_mostrar.producto = ticket_temp.cod and control_panel_mostrar.panel = 2 AND control_cocina.identificador = ticket_temp.hash and control_cocina.edo = 1 and control_cocina.cod = ticket_temp.cant");
+  WHERE ticket_temp.mesa = '".$_SESSION["mesa"]."' and ticket_temp.tx = ".$_SESSION["tx"]." and ticket_temp.td = ".$_SESSION["td"]." and control_panel_mostrar.producto = ticket_temp.cod and control_panel_mostrar.panel = 1 AND control_cocina.identificador = ticket_temp.hash and control_cocina.edo = 1 and control_cocina.cod = ticket_temp.cant");
  $cantidadproductos = $a->num_rows;
 
  if($cantidadproductos > 0){
@@ -929,9 +937,9 @@ if ($r = $db->select("nombre", "opciones_name", "WHERE cod = '".$br["opcion"]."'
 
 /// aqui debo actualizar para borrar si es ticket el que lleva el control de panel mostrar (paso a estado 2)
 if($_SESSION["config_o_ticket_pantalla"] == 2){
-    $cambio = array();
-    $cambio["edo"] = 2;
-    Helpers::UpdateId("control_cocina", $cambio, "identificador = '".$b["hash"]."' and td = ".$_SESSION["td"]."");
+    // $cambio = array();
+    // $cambio["edo"] = 2;
+    // Helpers::UpdateId("control_cocina", $cambio, "identificador = '".$b["hash"]."' and td = ".$_SESSION["td"]."");
 }
 
     }    $a->close();
@@ -1029,7 +1037,7 @@ printer_close($handle);
 
  public function AbrirCaja(){
  // $print
-$print = "LR2000";
+$print = "TICKET";
   
     $handle = printer_open($print);
     printer_set_option($handle, PRINTER_MODE, "RAW");
@@ -1069,7 +1077,7 @@ $col3 = 65;
 $col4 = 420;
 $col5 = 450;
 // $print
-$print = "LR2000";
+$print = "TICKET";
 
 
 
@@ -1344,7 +1352,7 @@ $col4 = 440;
 $col5 = 500;
 // $print
 
-$print = "LR2000";
+$print = "TICKET";
 
 
 
@@ -1514,7 +1522,7 @@ $col4 = 440;
 $col5 = 500;
 // $print
 
-$print = "LR2000";
+$print = "COCINA";
 
 
 
@@ -1576,9 +1584,9 @@ if ($r = $db->select("nombre", "opciones_name", "WHERE cod = '".$br["opcion"]."'
 
 /// aqui debo actualizar para borrar si es ticket el que lleva el control de panel mostrar (paso a estado 2)
 if($_SESSION["config_o_ticket_pantalla"] == 2){
-    $cambio = array();
-    $cambio["edo"] = 2;
-    Helpers::UpdateId("control_cocina", $cambio, "identificador = '".$b["hash"]."' and td = ".$_SESSION["td"]."");
+    // $cambio = array();
+    // $cambio["edo"] = 2;
+    // Helpers::UpdateId("control_cocina", $cambio, "identificador = '".$b["hash"]."' and td = ".$_SESSION["td"]."");
 }
 
     }    $a->close();

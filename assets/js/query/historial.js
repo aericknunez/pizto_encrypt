@@ -254,5 +254,53 @@ $(document).ready(function()
 
 
 
+	$('#btn-meseros').click(function(e){ /// agregar un producto 
+	e.preventDefault();
+	$.ajax({
+			url: "application/src/routes.php?op=210",
+			method: "POST",
+			data: $("#form-meseros").serialize(),
+			beforeSend: function () {
+				$('#btn-meseros').html('<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').addClass('disabled');
+	           // $("#contenido").html('<div class="row justify-content-md-center" ><img src="assets/img/load.gif" alt=""></div>');
+            },
+			success: function(data){
+				$('#btn-meseros').html('Mostrar Datos').removeClass('disabled');	      
+				$("#form-meseros").trigger("reset");
+				$("#contenido").html(data);	
+			}
+		})
+	});
+    
+
+
+
+
+///////////ver modal de ber mesas
+    $("body").on("click","#xverticket",function(){ 
+        
+        $('#ModalVer').modal('show');
+        
+        var num_fac = $(this).attr('num_fac');
+        var tx = $(this).attr('tx');
+        var op = $(this).attr('op');
+        var dataString = 'op='+op+'&num_fac='+num_fac+'&tx='+tx;
+
+        $.ajax({
+            type: "POST",
+            url: "application/src/routes.php",
+            data: dataString,
+            beforeSend: function () {
+               $("#vista").html('<div class="row justify-content-md-center" ><img src="assets/img/load.gif" alt=""></div>');
+            },
+            success: function(data) {            
+                $("#vista").html(data); // lo que regresa de la busquea         
+            }
+        });       
+    });
+
+
+
+
 
 });
