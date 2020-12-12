@@ -1,0 +1,267 @@
+/* ---------- gallery styles start here ----------------------- */
+.gallery {
+	list-style: none;
+	margin: 0;
+	padding-left: 3px;
+}
+
+.gallery li {
+	border: solid 2px #002E79; /*color de border solido*/
+	padding: 10px;
+	margin: 10px;
+	float: left;
+	position: relative;
+	width: 120px;
+	height: 110px;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	border-radius: 10px;
+}
+
+.gallery li:hover input {
+	border-color: #fff;
+}
+.gallery li:active input {
+     position: relative;
+	 opacity: 0.5;
+     top: 10px;
+}
+
+
+
+.gallery img { 
+	display: block;
+	position: relative;
+	bottom: 22px;
+	top: -27px;
+	width: 100px;
+	height: 72px;
+}
+
+.gallery em {
+	background: #fff;
+	color: #000;
+	font-style: normal;
+	padding: 1px 5px;
+	display: block;
+	position: relative;
+	top: 73px;
+	border: 1px solid #999; 
+	border-left-color: #888;
+	font-size:0.6em; /* tama;o de las letras */
+	width: 100px;
+	height: auto;
+	border-radius: 5px;
+}
+.gallery a {
+	text-decoration: none;
+}
+.gallery a:hover em {
+	background: #ffdb01;
+	border-color: #c25b08;
+}
+
+
+
+
+
+
+/* para la nueva galeria de productos*/
+.GalleryProduct {
+    position: relative;
+    margin: 5px;
+    border: 2px solid black;
+    float: left;
+    width: 100px;
+    transition-duration: 0.4s;
+    border-radius: 5px;
+    animation: winanim 0.5s ;
+    -webkit-backface-visibility:visible;
+    backface-visibility:visible;
+    box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 5px 8px 0 rgba(0,0,0,.14),0 1px 14px 0 rgba(0,0,0,.12)
+}
+
+.GalleryProduct:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
+}
+
+.GalleryProduct img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px
+}
+
+.img-title {
+    padding: 2px;
+    text-align: center;
+    font-size: 80%;
+    background:grey;
+    color:white;
+}
+
+
+@keyframes winanim {
+    0%{opacity:0;transform:scale3d(.3,.3,.3)}
+    50%{opacity:1}
+    
+}
+
+
+/* termina nuevos iconos*/
+
+
+
+/*card de reportes*/
+.card-counter{
+    background-color: #fff;
+    height: 100px;
+    border-radius: 5px;
+    transition: .3s linear all;
+  }
+
+  .card-counter:hover{
+    box-shadow: 4px 4px 20px #DADADA;
+    transition: .3s linear all;
+  }
+
+  .card-counter.primary{
+    background-color: #007bff;
+    color: #FFF;
+  }
+
+  .card-counter.danger{
+    background-color: #ef5350;
+    color: #FFF;
+  }  
+
+  .card-counter.success{
+    background-color: #66bb6a;
+    color: #FFF;
+  }  
+
+  .card-counter.info{
+    background-color: #26c6da;
+    color: #FFF;
+  }  
+
+
+  .card-counter.light{
+    background-color: #C0E8FF;
+    color: #000000;
+    border-color: #000000;
+    border: 3px;
+  }  
+
+  .card-counter i{
+    font-size: 5em;
+    opacity: 0.2;
+  }
+
+  .card-counter .count-numbers{
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    display: block;
+  }
+
+  .card-counter .count-name{
+    position: absolute;
+    right: 20px;
+    top: 65px;
+    font-style: italic;
+    text-transform: capitalize;
+    opacity: 0.7;
+    display: block;
+  }
+
+
+
+
+/* para el nuevo menu de productos*/
+.newmenu {
+    margin-left: -12px;
+    margin-right: -12px;
+    margin-top: 10px;
+    border: 1px solid #00547E;
+    transition-duration: 0.4s;
+    border-radius: 5px;
+    animation: winanim 0.5s ;
+    box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 5px 8px 0 rgba(0,0,0,.14),0 1px 14px 0 rgba(0,0,0,.12)
+}
+
+.newmenu:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
+}
+
+
+.menu-title {
+    padding: 1px;
+    text-align: center;
+    font-size: 80%;
+    background: #004AA7;
+    color: #FFFFFF;
+    border-radius: 0.2rem !important;
+}
+
+.menu-title2 { /*para productos y no para categorias*/
+    padding: 1px;
+    text-align: center;
+    font-size: 80%;
+    background: #002061;
+    color: #FFFFFF;
+    border-radius: 0.2rem !important;
+}
+
+.menu-titleC {
+    padding: 1px;
+    text-align: center;
+    font-size: 80%;
+    background: #5A0101;
+    color: #FFFFFF;
+    border-radius: 0.2rem !important;
+}
+
+.menu-titleO {
+    padding: 1px;
+    text-align: center;
+    font-size: 80%;
+    background: #013E5A;
+    color: #FFFFFF;
+    border-radius: 0.2rem !important;
+}
+
+.newmenu a {
+    text-decoration: none;
+}
+
+.newmenu a:active {
+  position: relative;
+  opacity: 0.5;
+  top: 10px;
+}
+
+
+
+/*tabla de lateral venta*/
+.headt td {
+  padding: .1rem!important;
+  height: 5px!important;
+  background-color: #BEE7FF;
+  color: #000000;
+}
+
+
+
+
+/*/// bordeados*/
+.bordeado{
+  border-radius: 4rem !important;
+}
+
+.bordeado2{
+  border-radius: 2rem !important;
+}
+
+.bordeado3{
+  border-radius: 1rem !important;
+}
