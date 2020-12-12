@@ -80,7 +80,7 @@ $subtotalf = 0;
 
 
 
-$a = $db->query("select cod, cant, producto, pv, total, fecha, hora, num_fac from ticket_temp where mesa = '".$numero."' $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]." group by cod");
+$a = $db->query("select cod, cant, producto, pv, total, fecha, hora, num_fac from ticket where mesa = '".$numero."' $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]." group by cod");
   
     foreach ($a as $b) {
  
@@ -90,11 +90,11 @@ $a = $db->query("select cod, cant, producto, pv, total, fecha, hora, num_fac fro
 
 
 /// para hacer las sumas
-if ($s = $db->select("sum(cant), sum(total)", "ticket_temp", "WHERE cod = ".$b["cod"]." and mesa = '".$numero."'  $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
+if ($s = $db->select("sum(cant), sum(total)", "ticket", "WHERE cod = ".$b["cod"]." and mesa = '".$numero."'  $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
         $scant=$s["sum(cant)"]; $stotal=$s["sum(total)"];
     } unset($s); 
 //////
-if ($sx = $db->select("sum(total)", "ticket_temp", "WHERE mesa = '".$numero."'  $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
+if ($sx = $db->select("sum(total)", "ticket", "WHERE mesa = '".$numero."'  $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
        $stotalx=$sx["sum(total)"];
     } unset($sx); 
  

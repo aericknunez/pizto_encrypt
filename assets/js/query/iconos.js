@@ -21,16 +21,26 @@ $(document).ready(function()
 	});
 
 
-	$("body").on("click","#deleteicon",function(){
-	var op = $(this).attr('op');
-	var cod = $(this).attr('cod');
-    $.post("application/src/routes.php", {op:op, cod:cod}, 
-    	function(htmlexterno){
-	$("#iconoinfo").html(htmlexterno);
-	 window.location.href="?iconos";
-   	 });
 
-	});
+    $("body").on("click","#deleteicon",function(){
+        var op = $(this).attr('op');
+        var cod = $(this).attr('cod');
+        var dataString = 'op='+op+'&cod='+cod;
+
+        $.ajax({
+            type: "POST",
+            url: "application/src/routes.php",
+            data: dataString,
+            beforeSend: function () {
+               $("#contenido").html('<div class="row justify-content-md-center" ><img src="assets/img/load.gif" alt=""></div>');
+            },
+            success: function(data) {            
+                $("#contenido").html(data); // lo que regresa de la busquea 
+            }
+        });
+    });                 
+
+
 
 
 

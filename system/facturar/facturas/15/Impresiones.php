@@ -102,7 +102,7 @@ $subtotalf = 0;
 
 
 
-$a = $db->query("select cod, cant, producto, pv, total, fecha, hora, num_fac from ticket_temp where num_fac = '".$numero."' $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]." group by cod");
+$a = $db->query("select cod, cant, producto, pv, total, fecha, hora, num_fac from ticket where num_fac = '".$numero."' $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]." group by cod");
   
     foreach ($a as $b) {
  
@@ -112,11 +112,11 @@ $a = $db->query("select cod, cant, producto, pv, total, fecha, hora, num_fac fro
 
 
 /// para hacer las sumas
-if ($s = $db->select("sum(cant), sum(total)", "ticket_temp", "WHERE cod = ".$b["cod"]." and num_fac = '".$numero."'  $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
+if ($s = $db->select("sum(cant), sum(total)", "ticket", "WHERE cod = ".$b["cod"]." and num_fac = '".$numero."'  $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
         $scant=$s["sum(cant)"]; $stotal=$s["sum(total)"];
     } unset($s); 
 //////
-if ($sx = $db->select("sum(total)", "ticket_temp", "WHERE num_fac = '".$numero."'  $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
+if ($sx = $db->select("sum(total)", "ticket", "WHERE num_fac = '".$numero."'  $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
        $stotalx=$sx["sum(total)"];
     } unset($sx); 
  
@@ -153,9 +153,10 @@ printer_draw_text($handle, "Propina " . $_SESSION['config_moneda_simbolo'] . ":"
 printer_draw_text($handle, Helpers::Format($propina),$col4, $oi);
 }
 
+$tot = $subtotalf + $propina;
 $oi=$oi+$n1;
 printer_draw_text($handle, "Total " . $_SESSION['config_moneda_simbolo'] . ":", 232, $oi);
-printer_draw_text($handle, Helpers::Format($subtotalf + $propina), $col4, $oi);
+printer_draw_text($handle, Helpers::Format($tot), $col4, $oi);
 
 
 $oi=$oi+$n2;
@@ -163,14 +164,14 @@ printer_draw_text($handle, "____________________________________", 0, $oi);
 
 //efectivo
 if($efectivo == NULL){
-  $efectivo = $subtotalf;
+  $efectivo = $tot;
 }
 $oi=$oi+$n1;
 printer_draw_text($handle, "Efectivo " . $_SESSION['config_moneda_simbolo'] . ":", 160, $oi);
 printer_draw_text($handle, Helpers::Format($efectivo), $col4, $oi);
 
 //cambio
-$cambios = $efectivo - $subtotalf;
+$cambios = $efectivo - $tot;
 $oi=$oi+$n1;
 printer_draw_text($handle, "Cambio " . $_SESSION['config_moneda_simbolo'] . ":", 162, $oi);
 printer_draw_text($handle, Helpers::Format($cambios), $col4, $oi);
@@ -1272,15 +1273,27 @@ printer_draw_text($handle, "____________________________________", 0, $oi);
 
 
 // gastos
-  $axy = $db->query("SELECT sum(cantidad) FROM gastos WHERE time BETWEEN '".$timeinicial."' and '".Helpers::TimeId()."' and edo = 1 and td = ".$_SESSION["td"]."");
+  $axy = $db->query("SELECT sum(cantidad) FROM gastos WHERE tipo != 3 and tipo != 5 and time BETWEEN '".$inicio."' and '".Helpers::TimeId()."' and edo = 1 and td = ".$_SESSION["td"]."");
 foreach ($axy as $bxy) {
     $gasto=$bxy["sum(cantidad)"];
 } $axy->close();
+
+// remesas (tipo  3)
+  $axy = $db->query("SELECT sum(cantidad) FROM gastos WHERE tipo = 3 and time BETWEEN '".$inicio."' and '".Helpers::TimeId()."' and edo = 1 and td = ".$_SESSION["td"]."");
+foreach ($axy as $bxy) {
+    $remesas=$bxy["sum(cantidad)"];
+} $axy->close();
+
 
 
 $oi=$oi+50;
 printer_draw_text($handle, "GASTOS REGISTRADOS: ", 20, $oi);
 printer_draw_text($handle, Helpers::Dinero($gasto), $col4, $oi);
+
+
+$oi=$oi+50;
+printer_draw_text($handle, "REMESAS: ", 20, $oi);
+printer_draw_text($handle, Helpers::Dinero($remesas), $col4, $oi);
 
 
 $oi=$oi+$n1;

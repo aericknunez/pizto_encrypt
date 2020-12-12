@@ -258,10 +258,11 @@ $(function () {
                 if(data === "on"){
                     $("#aquillevar").html("Comer Aqui");
                 } else {
-                    $("#aquillevar").html("Para LLevar");
+                    $("#aquillevar").html("Para LLevar <br> La propina no se cobrará");
                 }
             }
-        });       
+        });  
+        // $("#mtotal").load('application/src/routes.php?op=373');      
     });
 
 
