@@ -16,4 +16,33 @@ $(document).ready(function()
 
 
 
+
+
+
+// activa venta con tarjeta de credito
+    $("body").on("click","#tcredito",function(){ 
+
+        var dataString = 'op=370';
+
+        $.ajax({
+            type: "POST",
+            url: "application/src/routes.php",
+            data: dataString,
+            success: function(data) {            
+                if(data === "on"){
+                    $("#total").attr("readonly", true);
+                    $("#img-btn").attr("src", "assets/img/imagenes/visa.png");
+                } else {
+                    $("#total").attr("readonly", false);
+                    $("#img-btn").attr("src", "assets/img/imagenes/print.png");
+                }
+            }
+        });       
+    });
+
+
+
+
+
+
 });

@@ -527,6 +527,21 @@ $printer -> text("Mesa: " . $nombre_mesa);
 
 
 
+
+// COMENTARIOS DE LA MESA
+if ($r = $db->select("comentario", "mesa_comentarios", "WHERE mesa = ".$_SESSION["mesa"]." and td = ".$_SESSION["td"]." and tx = ".$_SESSION["tx"]."")) { 
+    $comentario = $r["comentario"];
+} unset($r);  
+
+if($comentario != NULL){
+$printer -> text("OBSERVACIONES: " . $comentario);
+$printer->feed();
+}
+
+
+
+
+
 $printer->feed();
 $printer->cut();
 $printer->close();
@@ -662,6 +677,23 @@ if($nombre_mesa != NULL){
 $printer -> text("Mesa: " . $nombre_mesa);
 
 }
+
+
+
+
+// COMENTARIOS DE LA MESA
+if ($r = $db->select("comentario", "mesa_comentarios", "WHERE mesa = ".$_SESSION["mesa"]." and td = ".$_SESSION["td"]." and tx = ".$_SESSION["tx"]."")) { 
+    $comentario = $r["comentario"];
+} unset($r);  
+
+if($comentario != NULL){
+$printer -> text("OBSERVACIONES: " . $comentario);
+$printer->feed();
+}
+
+
+
+
 
 
 

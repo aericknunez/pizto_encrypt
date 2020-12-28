@@ -137,6 +137,15 @@ $printer -> text($this->DosCol($fechaf, 30, $horaf, 25));
 
 
 
+/// numero de orden
+if ($sx = $db->select("mesa", "ticket", "WHERE num_fac = '".$numero."'  $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]." limit 1")) { 
+       $norden=$sx["mesa"];
+} unset($sx); 
+$printer -> text("ORDEN No: " . $norden);
+$printer->feed();
+/// orde
+
+
 $printer -> text("Cajero: " . $_SESSION['nombre']);
 
 $printer->feed();
@@ -474,8 +483,9 @@ $printer->feed();
 
 
 
-    if ($r = $db->select("llevar", "mesa", "WHERE mesa = '".$_SESSION["mesa"]."' and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
+    if ($r = $db->select("llevar, clientes", "mesa", "WHERE mesa = '".$_SESSION["mesa"]."' and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
         $llevar = $r["llevar"];
+        $clientes = $r["clientes"];
     } unset($r);  
 
 if($llevar == 1){
@@ -495,7 +505,7 @@ $printer -> text($this->DosCol($lleva, 11, "ORDEN: " . $_SESSION['mesa'], 30));
 
 $printer -> text($this->DosCol(date("d-m-Y"), 11, date("H:i:s"), 30));
 
-$printer -> text("Cajero: " . $_SESSION['nombre']);
+$printer -> text("Clientes: " . $clientes);
 $printer->feed();
 
 
@@ -536,6 +546,21 @@ $printer->feed();
 }
 
 // datos del cliente delivery
+
+
+// COMENTARIOS DE LA MESA
+if ($r = $db->select("comentario", "mesa_comentarios", "WHERE mesa = ".$_SESSION["mesa"]." and td = ".$_SESSION["td"]." and tx = ".$_SESSION["tx"]."")) { 
+    $comentario = $r["comentario"];
+} unset($r);  
+
+if($comentario != NULL){
+$printer -> text("OBSERVACIONES: " . $comentario);
+$printer->feed();
+}
+
+
+
+
 
 
 $printer->feed();
@@ -643,8 +668,9 @@ $printer->feed();
 
 
 
-    if ($r = $db->select("llevar", "mesa", "WHERE mesa = '".$_SESSION["mesa"]."' and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
+    if ($r = $db->select("llevar, clientes", "mesa", "WHERE mesa = '".$_SESSION["mesa"]."' and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
         $llevar = $r["llevar"];
+        $clientes = $r["clientes"];
     } unset($r);  
 
 if($llevar == 1){
@@ -664,7 +690,7 @@ $printer -> text($this->DosCol($lleva, 11, "ORDEN: " . $_SESSION['mesa'], 30));
 
 $printer -> text($this->DosCol(date("d-m-Y"), 11, date("H:i:s"), 30));
 
-$printer -> text("Cajero: " . $_SESSION['nombre']);
+$printer -> text("Clientes: " . $clientes);
 $printer->feed();
 
 
@@ -704,8 +730,21 @@ $printer -> text("Telefono: " . $ctelefono);
 $printer->feed();
 }
 
-
 // datos del cliente delivery
+
+
+
+// COMENTARIOS DE LA MESA
+if ($r = $db->select("comentario", "mesa_comentarios", "WHERE mesa = ".$_SESSION["mesa"]." and td = ".$_SESSION["td"]." and tx = ".$_SESSION["tx"]."")) { 
+    $comentario = $r["comentario"];
+} unset($r);  
+
+if($comentario != NULL){
+$printer -> text("OBSERVACIONES: " . $comentario);
+$printer->feed();
+}
+
+
 
 
 $printer->feed();

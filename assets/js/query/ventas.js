@@ -260,9 +260,11 @@ $(function () {
                 } else {
                     $("#aquillevar").html("Para LLevar <br> La propina no se cobrará");
                 }
+
+                $("#total_factura").load('application/src/routes.php?op=373');
             }
         });  
-        // $("#mtotal").load('application/src/routes.php?op=373');      
+              
     });
 
 
@@ -341,6 +343,47 @@ function MuestraOpciones(datos){
             }
         });       
     });
+
+
+
+
+
+
+
+
+
+
+
+
+///////////ver modal de ver mesas
+    $("body").on("click","#cometario_comanda",function(){         
+        $('#ComentarioComanda').modal('show');
+           
+    });
+
+
+
+
+    $('#btn-comentario').click(function(e){ /// agregar un comentario
+    e.preventDefault();
+    $.ajax({
+            url: "application/src/routes.php?op=374",
+            method: "POST",
+            data: $("#form-comentario").serialize(),
+            beforeSend: function () {
+                $('#btn-comentario').html('<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').addClass('disabled');
+               // $("#contenido").html('<div class="row justify-content-md-center" ><img src="assets/img/load.gif" alt=""></div>');
+            },
+            success: function(data){
+                $('#btn-comentario').html('AGREGAR COMENTARIO').removeClass('disabled');  
+                $("#vista_comentarios").html(data); 
+            }
+        })
+        $("#lateral").load('application/src/routes.php?op=22'); 
+    });
+    
+
+
 
 
 

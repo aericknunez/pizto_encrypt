@@ -254,7 +254,7 @@ $(document).ready(function()
 
 
 
-	$('#btn-meseros').click(function(e){ /// agregar un producto 
+	$('#btn-meseros').click(function(e){ /// 
 	e.preventDefault();
 	$.ajax({
 			url: "application/src/routes.php?op=210",
@@ -276,7 +276,7 @@ $(document).ready(function()
 
 
 
-///////////ver modal de ber mesas
+///////////ver modal de ver mesas
     $("body").on("click","#xverticket",function(){ 
         
         $('#ModalVer').modal('show');
@@ -298,6 +298,39 @@ $(document).ready(function()
             }
         });       
     });
+
+
+
+
+
+
+
+
+
+
+
+////ver imagenes de gastos
+    $("body").on("click","#ver_resumen",function(){ 
+        
+        $('#ModalResumen').modal('show');
+        var hash = $(this).attr('hash');
+        var corte = $(this).attr('corte');
+    
+            $.ajax({
+                url: "application/src/routes.php?op=375&hash="+hash+"&corte="+corte,
+                method: "POST",
+                beforeSend: function () {
+               		$("#vista_resumen").html('<div class="row justify-content-md-center" ><img src="assets/img/load.gif" alt=""></div>');
+            	},
+                success: function(data){
+                    $("#vista_resumen").html(data);         
+                }
+            });
+
+    });
+
+
+
 
 
 
