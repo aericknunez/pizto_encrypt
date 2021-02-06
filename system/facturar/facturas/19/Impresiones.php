@@ -34,7 +34,7 @@ $logo = EscposImage::load($img, false);
 $printer->bitImage($logo);
 $printer -> setJustification(Printer::JUSTIFY_LEFT);
 
-$printer->text("Km 35 carretera panamericana, Cojutepeque");
+$printer->text("Calle a San Salvador colonia el Mora Poste 337, Santa Ana");
 
 $printer->feed();
 $printer->text("Tel: 7985-6021");
@@ -208,7 +208,7 @@ $logo = EscposImage::load($img, false);
 $printer->bitImage($logo);
 $printer -> setJustification(Printer::JUSTIFY_LEFT);
 
-$printer->text("Km 35 carretera panamericana, Cojutepeque");
+$printer->text("Calle a San Salvador colonia el Mora Poste 337, Santa Ana");
 
 $printer->feed();
 $printer->text("Tel: 7985-6021");
