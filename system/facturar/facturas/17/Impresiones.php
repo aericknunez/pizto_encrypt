@@ -522,7 +522,7 @@ if ($r = $db->select("nombre", "mesa_nombre", "WHERE mesa = ".$_SESSION["mesa"].
 if($nombre_mesa != NULL){
 
 $printer -> text("Mesa: " . $nombre_mesa);
-
+$printer->feed();
 }
 
 
@@ -675,7 +675,7 @@ if ($r = $db->select("nombre", "mesa_nombre", "WHERE mesa = ".$_SESSION["mesa"].
 if($nombre_mesa != NULL){
 
 $printer -> text("Mesa: " . $nombre_mesa);
-
+$printer->feed();
 }
 
 

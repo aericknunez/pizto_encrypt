@@ -1,0 +1,2 @@
+ALTER TABLE `mesa_borrado` ADD `user` VARCHAR(100) NOT NULL AFTER `motivo`;
+ALTER TABLE `mesa_borrado` ADD `mesa_nombre` VARCHAR(100) NOT NULL AFTER `user`, ADD `mesero` VARCHAR(50) NOT NULL AFTER `mesa_nombre`;

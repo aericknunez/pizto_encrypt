@@ -35,7 +35,7 @@ $(document).ready(function()
 	           // $("#contenido").html('<div class="row justify-content-md-center" ><img src="assets/img/load.gif" alt=""></div>');
             },
 			success: function(data){
-				$('#btn-addmesa').html('Agregar Gasto').removeClass('disabled');	      
+				$('#btn-addmesa').html('Aceptar').removeClass('disabled');	      
 				$("#form-addmesa").trigger("reset");
 				$("#contenido").html(data);	
 			}

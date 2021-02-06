@@ -175,6 +175,16 @@ $oi=$oi+$n1;
 printer_draw_text($handle, "Cajero: " . $_SESSION['nombre'], 25, $oi);
 
 
+if ($sx = $db->select("cajero", "ticket", "WHERE num_fac = '".$numero."'  $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
+     $mesero=$sx["cajero"];
+} unset($sx); 
+ 
+
+$oi=$oi+$n1;
+printer_draw_text($handle, "Mesero: " . $mesero, 25, $oi);
+
+
+
 $oi=$oi+$n1+$n4;
 printer_draw_text($handle, "Nuestros precios incluyen IVA", 50, $oi);
 
@@ -200,192 +210,6 @@ printer_close($handle);
 
 
  public function Factura($efectivo, $numero){
-
-
-$txt1   = "17"; 
-$txt2   = "10";
-$txt3   = "15";
-$txt4   = "8";
-$n1   = "18";
-$n2   = "24";
-$n3   = "21";
-$n4   = "10";
-
-// $print
-$print = "EPSON TM-U220 Receipt";
-
-
-$col1 = 0;
-$col2 = 30;
-$col3 = 250;
-$col4 = 330;
-$col5 = 330;
-
-
-
-
-$handle = printer_open($print);
-printer_set_option($handle, PRINTER_MODE, "RAW");
-
-printer_start_doc($handle, "Mi Documento");
-printer_start_page($handle);
-
-
-$font = printer_create_font("Arial", $txt1, $txt2, PRINTER_FW_NORMAL, false, false, false, 0);
-printer_select_font($handle, $font);
-
-
-//// comienza la factura
-printer_draw_text($handle, "RESTAURANTE Y HOSTAL", 50, $oi);
-$oi=$oi+$n1;
-printer_draw_text($handle, "BUENOS AIRES", 98, $oi);
-
-$oi=$oi+$n1;
-printer_draw_text($handle, "El Paraiso Ataco", 100, $oi);
-$oi=$oi+$n1;
-printer_draw_text($handle, "2a Av. Norte, Finca Buenos Aires", 0, $oi);
-
-$oi=$oi+$n1;
-printer_draw_text($handle, "Tel: 2450-5034", 0, $oi);
-$oi=$oi+$n1;
-
-//$numero1=str_pad($numero, 8, "0", STR_PAD_LEFT);
-//$numero1="000-001-01-$numero1";
-printer_draw_text($handle, "Factura Numero: $numero", 0, $oi);
-
-
-
-///
-$oi=$oi+$n2;
-printer_draw_text($handle, "____________________________________", 0, $oi);
-$oi=$oi+$n1;
-printer_draw_text($handle, "Cant.", 0, $oi);
-printer_draw_text($handle, "Descripcion", 60, $oi);
-printer_draw_text($handle, "P/U", 240, $oi);
-printer_draw_text($handle, "Total", 320, $oi);
-$oi=$oi+$n1+$n3;
-printer_draw_text($handle, "____________________________________", 0, $oi);
-
-
-///////////////
-///
-$subtotalf = 0;
-///
-
-$a = $db->query("select cod, cant, producto, pv, total, fecha, hora, num_fac from ticket_temp where num_fac = '".$numero."' $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]." group by cod");
-  
-    foreach ($a as $b) {
- 
- $fechaf=$b["fecha"];
- $horaf=$b["hora"];
- $num_fac=$b["num_fac"];
-
-
-/// para hacer las sumas
-if ($s = $db->select("sum(cant), sum(total)", "ticket_temp", "WHERE cod = ".$b["cod"]." and num_fac = '".$numero."'  $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
-        $scant=$s["sum(cant)"]; $stotal=$s["sum(total)"];
-    } unset($s); 
-//////
-if ($sx = $db->select("sum(total)", "ticket_temp", "WHERE num_fac = '".$numero."'  $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
-       $stotalx=$sx["sum(total)"];
-    } unset($sx); 
- 
-
-          $oi=$oi+$n1;
-          printer_draw_text($handle, $scant, $col1, $oi);
-          printer_draw_text($handle, $b["producto"], $col2, $oi);
-          printer_draw_text($handle, $b["pv"], $col3, $oi);
-          printer_draw_text($handle, $stotal, $col4, $oi);
-
-
-////
-$subtotalf = $subtotalf + $stotal;
-///
-
-    }    $a->close();
-
-
-
-$oi=$oi+$n3+$n1;
-printer_draw_text($handle, "Sub Total " . $_SESSION['config_moneda_simbolo'] . ":", 185, $oi);
-printer_draw_text($handle, Helpers::Format(Helpers::STotal($subtotalf, $_SESSION['config_imp'])), 320, $oi);
-
-
-$oi=$oi+$n1;
-printer_draw_text($handle, "15% Impu. " . $_SESSION['config_moneda_simbolo'] . ":", 175, $oi);
-printer_draw_text($handle, Helpers::Format(Helpers::Impuesto(Helpers::STotal($subtotalf, $_SESSION['config_imp']), $_SESSION['config_imp'])), 320, $oi);
-
-
-if($_SESSION['config_propina'] != 0.00){ ///  prara agregarle la propina -- sino borrar
-$oi=$oi+$n1;
-printer_draw_text($handle, "Propina:", 320, $oi);
-printer_draw_text($handle, Helpers::Format(Helpers::Propina($subtotalf)), 402, $oi);
-$subtotalf = Helpers::PropinaTotal($subtotalf);
-}
-
-$oi=$oi+$n1;
-printer_draw_text($handle, "Total " . $_SESSION['config_moneda_simbolo'] . ":", 232, $oi);
-printer_draw_text($handle, Helpers::Format($subtotalf), 320, $oi);
-
-$oi=$oi+$n2;
-printer_draw_text($handle, "____________________________________", 0, $oi);
-
-//efectivo
-if($efectivo == NULL){
-  $efectivo = $subtotalf;
-}
-$oi=$oi+$n1;
-printer_draw_text($handle, "Efectivo " . $_SESSION['config_moneda_simbolo'] . ":", 160, $oi);
-printer_draw_text($handle, Helpers::Format($efectivo), 320, $oi);
-
-//cambio
-$cambios = $efectivo - $subtotalf;
-$oi=$oi+$n1;
-printer_draw_text($handle, "Cambio " . $_SESSION['config_moneda_simbolo'] . ":", 162, $oi);
-printer_draw_text($handle, Helpers::Format($cambios), 320, $oi);
-
-$oi=$oi+$n2;
-printer_draw_text($handle, "___________________________________", 0, $oi);
-
-$oi=$oi+$n1;
-printer_draw_text($handle, "G=Articulo Gravado  E= Artculo Exento", 0, $oi);
-
-
-
-$oi=$oi+$n1;
-printer_draw_text($handle, $fechaf, 0, $oi);
-printer_draw_text($handle, $horaf, 232, $oi);
-
-
-
-
-///// crea de nuevo fuente
-$font = printer_create_font("Arial", $txt1, $txt2, PRINTER_FW_NORMAL, false, false, false, 0);
-printer_select_font($handle, $font);
-//////////////////
-
-$oi=$oi+$n1;
-printer_draw_text($handle, "Cajero: " . $_SESSION['nombre'], 25, $oi);
-
-
-$oi=$oi+$n1+$n4;
-printer_draw_text($handle, "Nuestros precios incluyen IVA", 50, $oi);
-
-$oi=$oi+$n1+$n4;
-printer_draw_text($handle, "GRACIAS POR SU COMPRA...", 50, $oi);
-
-$oi=$oi+$n1+$n2;
-printer_draw_text($handle, ".", NULL, $oi);
-printer_write($handle, chr(27).chr(112).chr(48).chr(55).chr(121)); //enviar pulso
-printer_delete_font($font);
-
-
-
-///
-printer_end_page($handle);
-printer_end_doc($handle);
-printer_close($handle);
-
 
 }   /// termina FACTURA
 
@@ -814,7 +638,7 @@ $print = "EPSON TM-U220 Receipt";
 $col1 = 0;
 $col2 = 30;
 $col3 = 250;
-$col4 = 330;
+$col4 = 320;
 $col5 = 330;
 
 
@@ -906,25 +730,25 @@ printer_draw_text($handle, "____________________________________", 0, $oi);
 
 
 // listado de gastos
-  $axz = $db->query("SELECT nombre, cantidad FROM gastos WHERE time BETWEEN '".$inicio."' and '".Helpers::TimeId()."' and edo = 1 and td = ".$_SESSION["td"]."");
+  $axz = $db->query("SELECT nombre, cantidad FROM gastos WHERE time BETWEEN '".$timeinicial."' and '".Helpers::TimeId()."' and edo = 1 and td = ".$_SESSION["td"]."");
 foreach ($axz as $bxz) {
 
 $oi=$oi+$n1;
-printer_draw_text($handle, $bxy["nombre"], 0, $oi);
-printer_draw_text($handle, Helpers::Dinero($bxy["cantidad"]), $col4, $oi);
+printer_draw_text($handle, $bxz["nombre"], 5, $oi);
+printer_draw_text($handle, Helpers::Dinero($bxz["cantidad"]), $col4, $oi);
 
 } $axz->close();
 
 
 
 // gastos
-  $axy = $db->query("SELECT sum(cantidad) FROM gastos WHERE tipo != 3 and tipo != 5 and time BETWEEN '".$inicio."' and '".Helpers::TimeId()."' and edo = 1 and td = ".$_SESSION["td"]."");
+  $axy = $db->query("SELECT sum(cantidad) FROM gastos WHERE tipo != 3 and tipo != 5 and time BETWEEN '".$timeinicial."' and '".Helpers::TimeId()."' and edo = 1 and td = ".$_SESSION["td"]."");
 foreach ($axy as $bxy) {
     $gasto=$bxy["sum(cantidad)"];
 } $axy->close();
 
 // remesas (tipo  3)
-  $axy = $db->query("SELECT sum(cantidad) FROM gastos WHERE tipo = 3 and time BETWEEN '".$inicio."' and '".Helpers::TimeId()."' and edo = 1 and td = ".$_SESSION["td"]."");
+  $axy = $db->query("SELECT sum(cantidad) FROM gastos WHERE tipo = 3 and time BETWEEN '".$timeinicial."' and '".Helpers::TimeId()."' and edo = 1 and td = ".$_SESSION["td"]."");
 foreach ($axy as $bxy) {
     $remesas=$bxy["sum(cantidad)"];
 } $axy->close();
