@@ -390,4 +390,53 @@ function MuestraOpciones(datos){
 
 
 
+
+
+
+
+
+
+/// llamar modal cantidad
+    $("body").on("click","#xcantidad",function(){ 
+        
+        $('#ModalCantidad').modal('show');
+        
+        var cantidad = $(this).attr('cantidad');
+        var codigox = $(this).attr('codigox');
+        var cliente = $(this).attr('cliente');
+
+        $('#codigox').attr("value", codigox);
+        $('#cantidad').attr("value", cantidad);
+        $('#cliente').attr("value", cliente);
+        
+    });
+
+
+
+
+    $('#btn-Ccantidad').click(function(e){ /// cambia la cantidad de los productos
+        e.preventDefault();
+        $.ajax({
+            url: "application/src/routes.php?op=20q",
+            method: "POST",
+            data: $("#form-Ccantidad").serialize(),
+            beforeSend: function () {
+                $('#btn-Ccantidad').html('<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').addClass('disabled');
+            },
+            success: function(data){
+               $('#btn-Ccantidad').html('Agregar').removeClass('disabled');
+               $("#form-Ccantidad").trigger("reset");
+               $('#ModalCantidad').modal('hide');
+               $("#ventana").html(data); // lo que regresa de la busquea 
+               $("#lateral").load('application/src/routes.php?op=22'); // caraga el lateral
+            }
+        })
+    })
+
+
+
+
+
+
+
 });

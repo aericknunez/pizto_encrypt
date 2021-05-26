@@ -76,7 +76,7 @@ $(document).ready(function()
 ///////////modal para agregar nuevo delivery
     $("body").on("click","#opciones",function(){ 
         
-        $('#ModalOpciones').modal('show');
+        $('#ModalOpcion').modal('show');
 
         var mesa = $(this).attr('mesa');
         var hash = $(this).attr('hash');
@@ -88,14 +88,62 @@ $(document).ready(function()
             url: "application/src/routes.php",
             data: dataString,
             beforeSend: function () {
-               $("#vistaopciones").html('<div class="row justify-content-md-center" ><img src="assets/img/load.gif" alt=""></div>');
+               $("#vistaopcion").html('<div class="row justify-content-md-center" ><img src="assets/img/load.gif" alt=""></div>');
             },
             success: function(data) {            
-                $("#vistaopciones").html(data); // lo que regresa de la busquea 		
+                $("#vistaopcion").html(data); // lo que regresa de la busquea 		
             }
         });
         
     });
+
+
+
+
+
+
+
+///////////modal para agregar nuevo precio de delivery
+    $("body").on("click","#envio",function(){ 
+        
+        $('#ModalEnvio').modal('show');
+
+        var mesa = $(this).attr('mesa');
+        var hash = $(this).attr('hash');
+		var op = "414";
+		var dataString = 'op='+op;
+
+		$.ajax({
+            type: "POST",
+            url: "application/src/routes.php",
+            data: dataString,
+            beforeSend: function () {
+               $("#vistaenvio").html('<div class="row justify-content-md-center" ><img src="assets/img/load.gif" alt=""></div>');
+            },
+            success: function(data) {            
+                $("#vistaenvio").html(data); // lo que regresa de la busquea 		
+            }
+        });
+        
+    });
+
+	$("body").on("click","#addenvio",function(){
+		var cant = $(this).attr('cant');
+		var op = "20t";
+    	$.post("application/src/routes.php", {op:op, cant:cant}, 
+    	function(data){
+    		$("#vistaenvio").html(data); // lo que regresa de la busquea 
+    		$("#lateral").load('application/src/routes.php?op=22');
+    		$('#ModalEnvio').modal('hide');
+   	 	});
+	});
+
+
+
+//////////
+
+
+
 
 
 

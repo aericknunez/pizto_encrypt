@@ -34,6 +34,25 @@ $(document).ready(function()
 	})
 	
 	
+	$('#btn-diarioL').click(function(e){ /// para el formulario
+		$("#form-diarioL").hide();
+		MuestraLoader();
+		e.preventDefault();
+		$.ajax({
+			url: "application/src/routes.php?op=70x",
+			method: "POST",
+			data: $("#form-diarioL").serialize(),
+			success: function(data){
+				$("#contenido").html(data);
+				$("#form-diarioL").trigger("reset");
+				$("#form-diarioL").show();
+				EscondeLoader();
+			}
+		})
+	})
+	
+	
+
 
 
 	$('#btn-mensual').click(function(e){ /// para el formulario
@@ -328,6 +347,28 @@ $(document).ready(function()
             });
 
     });
+
+
+
+    $("body").on("click","#imprimir_corte",function(){
+    	var inicio = $(this).attr('inicio');
+        var fin = $(this).attr('fin');
+        var dataString = "op=63&inicio="+inicio+"&fin="+fin;
+
+        $.ajax({
+            type: "POST",
+            url: "application/src/routes.php",
+            data: dataString,
+            beforeSend: function () {
+               $("#msjimprimir").html('<div class="row justify-content-md-center" ><img src="assets/img/load.gif" alt=""></div>');
+            },
+            success: function(data) {           
+                $("#msjimprimir").html(data); 
+            }
+        });
+    });       
+
+
 
 
 

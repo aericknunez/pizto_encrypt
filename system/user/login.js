@@ -22,11 +22,11 @@ $(document).ready(function()
 
 
 
-$("#form-login").keypress(function(e) {//Para deshabilitar el uso de la tecla "Enter"
-if (e.which == 13) {
-return false;
-}
-});
+// $("#form-login").keypress(function(e) {//Para deshabilitar el uso de la tecla "Enter"
+// if (e.which == 13) {
+// return false;
+// }
+// });
 
 
 /// registrar modal

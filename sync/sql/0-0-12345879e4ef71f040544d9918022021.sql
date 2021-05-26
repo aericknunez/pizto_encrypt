@@ -1,0 +1,1 @@
+ALTER TABLE `pro_bruto` ADD `minimo` FLOAT(10,4) NOT NULL AFTER `cantidad`;

@@ -15,7 +15,13 @@ $(document).ready(function()
     	cat:cat, popup:popup, imagen:imagen, canti:canti, preci:preci, opcion:opcion}, 
     	function(htmlexterno){
 	//$("#iconoinfo").html(htmlexterno);
-	 window.location.href="?iconos";
+           if(op == 11){
+              window.location.href="?modal=addopciones&cod=" + cod;
+           } else {
+              window.location.href="?iconos";   
+           }
+
+
    	 });
 
 	});

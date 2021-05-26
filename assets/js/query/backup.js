@@ -75,4 +75,37 @@ $(document).ready(function()
 
 
 
+/// eliminar datos del sistema
+    $("body").on("click","#deleteall",function(){ 
+        
+        var op = "249";
+        var dataString = 'op='+op;
+
+        $.ajax({
+            type: "POST",
+            url: "application/src/routes.php",
+            data: dataString,
+            beforeSend: function () {
+               $("#vista").html('<div class="row justify-content-center" ><img src="assets/img/loa.gif" alt=""></div>');
+            },
+            success: function(data) {            
+                $("#vista").html(data); // lo que regresa de la busquea      
+            }
+        });
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 });

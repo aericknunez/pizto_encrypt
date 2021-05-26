@@ -139,7 +139,6 @@ printer_close($handle);
 
  public function Factura($efectivo, $numero){
 
-  // $this->Ticket($efectivo, $numero);
   $this->Facturax($efectivo, $numero);
 
 
@@ -151,7 +150,6 @@ printer_close($handle);
  public function Facturax($efectivo, $numero){
   $db = new dbConn();
 
-$this->Ticket($efectivo, $numero);
 
 $txt1   = "17"; 
 $txt2   = "10";

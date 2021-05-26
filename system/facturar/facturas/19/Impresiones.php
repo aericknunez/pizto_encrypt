@@ -32,12 +32,16 @@ $printer -> setLineSpacing(80);
 $printer -> setJustification(Printer::JUSTIFY_CENTER);
 $logo = EscposImage::load($img, false);
 $printer->bitImage($logo);
-$printer -> setJustification(Printer::JUSTIFY_LEFT);
 
-$printer->text("Calle a San Salvador colonia el Mora Poste 337, Santa Ana");
 
+$printer->text("Calle a San Salvador colonia el Mora Poste 337");
 $printer->feed();
-$printer->text("Tel: 7985-6021");
+
+$printer->text("Santa Ana");
+$printer->feed();
+
+$printer -> setJustification(Printer::JUSTIFY_LEFT);
+$printer->text("Tel: 7907-3196");
 
 $printer->feed();
 $printer->text("FACTURA NUMERO: " . $numero);
@@ -46,8 +50,7 @@ $printer->text("FACTURA NUMERO: " . $numero);
 /* Stuff around with left margin */
 $printer->feed();
 $printer -> setJustification(Printer::JUSTIFY_CENTER);
-$printer -> text("____________________________________________________________");
-$printer -> setJustification(Printer::JUSTIFY_LEFT);
+$printer -> text("_______________________________________________________");
 $printer->feed();
 /* Items */
 
@@ -59,13 +62,13 @@ $printer -> setEmphasis(false);
 
 $subtotalf = 0;
 
-$a = $db->query("select cod, cant, producto, pv, total, fecha, hora, num_fac from ticket where num_fac = '".$numero."' $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]." group by cod");
+$a = $db->query("select cod, cant, producto, pv, total, fecha, hora, mesa from ticket where num_fac = '".$numero."' $cancelar and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]." group by cod");
   
     foreach ($a as $b) {
  
  $fechaf=$b["fecha"];
  $horaf=$b["hora"];
- $num_fac=$b["num_fac"];
+ $mesa=$b["mesa"];
 
 
 /// para hacer las sumas
@@ -86,7 +89,7 @@ $subtotalf = $subtotalf + $stotal;
     }    $a->close();
 
 
-$printer -> text("____________________________________________________________");
+$printer -> text("_______________________________________________________");
 $printer->feed();
 
 
@@ -95,20 +98,20 @@ $printer->feed();
     } unset($r); 
 
 
-$printer -> text($this->DosCol("Sub Total " . $_SESSION['config_moneda_simbolo'] . ":", 40, Helpers::Format($subtotalf), 20));
+$printer -> text($this->DosCol("Sub Total " . $_SESSION['config_moneda_simbolo'] . ":", 40, Helpers::Format($subtotalf), 10));
 
 
 
 
 if($propina > 0.00){ ///  prara agregarle la propina -- sino borrar
-$printer -> text($this->DosCol("Propina " . $_SESSION['config_moneda_simbolo'] . ":", 40, Helpers::Format($propina), 20));
+$printer -> text($this->DosCol("Propina " . $_SESSION['config_moneda_simbolo'] . ":", 40, Helpers::Format($propina), 10));
 }
 
 $xtotal = $subtotalf + $propina;
-$printer -> text($this->DosCol("Total " . $_SESSION['config_moneda_simbolo'] . ":", 40, Helpers::Format($xtotal), 20));
+$printer -> text($this->DosCol("Total " . $_SESSION['config_moneda_simbolo'] . ":", 40, Helpers::Format($xtotal), 10));
 
 
-$printer -> text("____________________________________________________________");
+$printer -> text("_______________________________________________________");
 $printer->feed();
 
 
@@ -117,7 +120,7 @@ if($efectivo == NULL){
   $efectivo = $xtotal;
 }
 
-$printer -> text($this->DosCol("Efectivo " . $_SESSION['config_moneda_simbolo'] . ":", 40, Helpers::Format($efectivo), 20));
+$printer -> text($this->DosCol("Efectivo " . $_SESSION['config_moneda_simbolo'] . ":", 40, Helpers::Format($efectivo), 10));
 
 
 
@@ -125,20 +128,34 @@ $printer -> text($this->DosCol("Efectivo " . $_SESSION['config_moneda_simbolo'] 
 //cambio
 $cambios = $efectivo - $xtotal;
 
-$printer -> text($this->DosCol("Cambio " . $_SESSION['config_moneda_simbolo'] . ":", 40, Helpers::Format($cambios), 20));
+$printer -> text($this->DosCol("Cambio " . $_SESSION['config_moneda_simbolo'] . ":", 40, Helpers::Format($cambios), 10));
 
 
-$printer -> text("____________________________________________________________");
+$printer -> text("_______________________________________________________");
 $printer->feed();
 
 
 
 
-$printer -> text($this->DosCol($fechaf, 30, $horaf, 30));
+$printer -> text($this->DosCol($fechaf, 30, $horaf, 20));
 
 
 
 $printer -> text("Cajero: " . $_SESSION['nombre']);
+$printer->feed();
+
+
+// nombre de mesa
+if ($r = $db->select("nombre", "mesa_nombre", "WHERE mesa = ".$mesa." and td = ".$_SESSION["td"]." and tx = ".$_SESSION["tx"]."")) { 
+    $nombre_mesa = $r["nombre"];
+} unset($r);  
+
+if($nombre_mesa != NULL){
+  $printer -> text("Mesa: " . $nombre_mesa);
+   $printer->feed();
+}
+
+
 
 $printer->feed();
 $printer -> setJustification(Printer::JUSTIFY_CENTER);
@@ -206,12 +223,16 @@ $printer -> setLineSpacing(80);
 $printer -> setJustification(Printer::JUSTIFY_CENTER);
 $logo = EscposImage::load($img, false);
 $printer->bitImage($logo);
-$printer -> setJustification(Printer::JUSTIFY_LEFT);
 
-$printer->text("Calle a San Salvador colonia el Mora Poste 337, Santa Ana");
-
+$printer->text("Calle a San Salvador colonia el Mora Poste 337");
 $printer->feed();
-$printer->text("Tel: 7985-6021");
+
+$printer->text("Santa Ana");
+$printer->feed();
+
+$printer -> setJustification(Printer::JUSTIFY_LEFT);
+$printer->text("Tel: 7907-3196");
+
 
 $printer->feed();
 $printer->text("ORDEN NUMERO: " . $numero);
@@ -224,8 +245,7 @@ $printer->text("PRECUENTA");
 /* Stuff around with left margin */
 $printer->feed();
 $printer -> setJustification(Printer::JUSTIFY_CENTER);
-$printer -> text("____________________________________________________________");
-$printer -> setJustification(Printer::JUSTIFY_LEFT);
+$printer -> text("_______________________________________________________");
 $printer->feed();
 /* Items */
 
@@ -270,24 +290,24 @@ $subtotalf = $subtotalf + $stotal;
 
 
 
-$printer -> text("____________________________________________________________");
+$printer -> text("_______________________________________________________");
 $printer->feed();
 
 
 
-$printer -> text($this->DosCol("Sub Total " . $_SESSION['config_moneda_simbolo'] . ":", 40, Helpers::Format($subtotalf), 20));
+$printer -> text($this->DosCol("Sub Total " . $_SESSION['config_moneda_simbolo'] . ":", 40, Helpers::Format($subtotalf), 10));
 
 
 
 if($_SESSION['config_propina'] != 0.00 and $_SESSION["delivery_on"] == FALSE and $_SESSION["aquiLlevar"] == "on"){ ///  prara agregarle la propina -- sino borrar
-$printer -> text($this->DosCol("Propina " . $_SESSION['config_moneda_simbolo'] . ":", 40, Helpers::Format(Helpers::Propina($subtotalf)), 20));
+$printer -> text($this->DosCol("Propina " . $_SESSION['config_moneda_simbolo'] . ":", 40, Helpers::Format(Helpers::Propina($subtotalf)), 10));
   $subtotalf = Helpers::PropinaTotal($subtotalf);
 }
 
 
 
 $xtotal = $subtotalf + $propina;
-$printer -> text($this->DosCol("Total " . $_SESSION['config_moneda_simbolo'] . ":", 40, Helpers::Format($xtotal), 20));
+$printer -> text($this->DosCol("Total " . $_SESSION['config_moneda_simbolo'] . ":", 40, Helpers::Format($xtotal), 10));
 
 
 
@@ -295,14 +315,14 @@ $printer -> text($this->DosCol("Total " . $_SESSION['config_moneda_simbolo'] . "
 
 
 
-$printer -> text("____________________________________________________________");
+$printer -> text("_______________________________________________________");
 $printer->feed();
 
 
 
 
 
-$printer -> text($this->DosCol($fechaf, 30, $horaf, 30));
+$printer -> text($this->DosCol($fechaf, 30, $horaf, 20));
 
 
 $printer -> text("Cajero: " . $_SESSION['nombre']);
@@ -365,7 +385,7 @@ if($llevar == 3){
    $printer->feed();
 
 
-$printer -> text("____________________________________________________________");
+$printer -> text("______________________________________________________");
 $printer->feed();
 
 
@@ -417,7 +437,7 @@ $a = $db->query("select ticket_temp.cod as cod, ticket_temp.hash as hash, ticket
 
 
 
-$nombre_impresora = "LR2000";
+$nombre_impresora = "COCINA";
 
 $connector = new WindowsPrintConnector($nombre_impresora);
 $printer = new Printer($connector);
@@ -439,7 +459,7 @@ $printer -> setTextSize(1, 2);
 $printer -> setLineSpacing(80);
 
 
-$printer -> text("____________________________________________________________");
+$printer -> text("_______________________________________________________");
 $printer->feed();
 
 
@@ -484,7 +504,7 @@ if($_SESSION["config_o_ticket_pantalla"] == 2){
     }    $a->close();
 
 
-$printer -> text("____________________________________________________________");
+$printer -> text("_______________________________________________________");
 $printer->feed();
 
 
@@ -570,7 +590,7 @@ $a = $db->query("select ticket_temp.cod as cod, ticket_temp.hash as hash, ticket
 
 
 
-$nombre_impresora = "BAR";
+$nombre_impresora = "COCINA";
 
 $connector = new WindowsPrintConnector($nombre_impresora);
 $printer = new Printer($connector);
@@ -592,7 +612,7 @@ $printer -> setTextSize(1, 2);
 $printer -> setLineSpacing(80);
 
 
-$printer -> text("____________________________________________________________");
+$printer -> text("_______________________________________________________");
 $printer->feed();
 
 
@@ -637,7 +657,7 @@ if($_SESSION["config_o_ticket_pantalla"] == 2){
     }    $a->close();
 
 
-$printer -> text("____________________________________________________________");
+$printer -> text("_______________________________________________________");
 $printer->feed();
 
 
@@ -766,15 +786,13 @@ $printer -> setFont(Printer::FONT_B);
 $printer -> setTextSize(1, 2);
 $printer -> setLineSpacing(80);
 
-$printer -> setJustification(Printer::JUSTIFY_LEFT);
+$printer -> setJustification(Printer::JUSTIFY_CENTER);
 
 $printer -> text("RESUMEN DE CORTE DE CAJA");
 
 /* Stuff around with left margin */
 $printer->feed();
-$printer -> setJustification(Printer::JUSTIFY_CENTER);
-$printer -> text("____________________________________________________________");
-$printer -> setJustification(Printer::JUSTIFY_LEFT);
+$printer -> text("_______________________________________________________");
 $printer->feed();
 /* Items */
 
@@ -796,21 +814,52 @@ $subtotalf = 0;
 ////
 
 
-$a = $db->query("select cod, cant, producto, pv, total, fecha, hora, num_fac from ticket where time BETWEEN '".$inicio."' and '".Helpers::TimeId()."' and td = ".$_SESSION["td"]." order by num_fac");
+
+
+
+
+
+  $a = $db->query("select cod, sum(cant), sum(total), producto, pv 
+      from ticket 
+      where 
+      cod != 8888 and edo = 1 and time BETWEEN '".$inicio."' and '".Helpers::TimeId()."' and td = ".$_SESSION['td']." GROUP BY cod order by sum(cant) desc");
+
+      foreach ($a as $b) {
+
+      $ay = $db->query("SELECT nombre FROM producto where cod = ".$b["cod"]." and td = ".$_SESSION['td']."");
+      foreach ($ay as $by) {
+          $nombre_producto=$by["nombre"];
+      } $ay->close();
+
+if($b["cod"] == "8889"){  $nombre_producto = "(Productos Especiales) ";   } 
+      
+$printer -> text($this->Item( $b["sum(cant)"], $nombre_producto, Helpers::Dinero($b["pv"]), Helpers::Dinero($b["sum(total)"])));
+ } 
+
+      $a->close();
+
+
+
+
+
+
+
+
+// $a = $db->query("select cod, cant, producto, pv, total, fecha, hora, num_fac from ticket where time BETWEEN '".$inicio."' and '".Helpers::TimeId()."' and td = ".$_SESSION["td"]." order by num_fac");
   
-    foreach ($a as $b) {
+//     foreach ($a as $b) {
  
-$subtotalf = 0;
+// $subtotalf = 0;
 
-$printer -> text($this->Item("(". $b["num_fac"] . ") " . $b["cant"], $b["producto"], $b["pv"], $b["total"]));
+// $printer -> text($this->Item($b["cant"], $b["producto"], $b["pv"], $b["total"]));
 
-$subtotalf = $subtotalf + $stotal;
-///
+// $subtotalf = $subtotalf + $stotal;
+// ///
 
-}    $a->close();
+// }    $a->close();
 
 
-$printer -> text("____________________________________________________________");
+$printer -> text("_______________________________________________________");
 $printer->feed();
 
   // total de venta
@@ -879,18 +928,18 @@ $a = $db->query("SELECT sum(total) FROM ticket WHERE edo = 1 and tipo_pago = 1 a
 
 
 
-$printer -> text($this->DosCol("VENTA EN EFECTIVO: ", 40, Helpers::Dinero($vefectivo), 20));
+$printer -> text($this->DosCol("VENTA EN EFECTIVO: ", 40, Helpers::Dinero($vefectivo), 10));
 
-$printer -> text($this->DosCol("PROPINA EN EFECTIVO: ", 40, Helpers::Dinero($propinatarjetae), 20));
-
-
-$printer -> text($this->DosCol("VENTA CON TARJETA: ", 40, Helpers::Dinero($tarjetacredito), 20));
-
-$printer -> text($this->DosCol("PROPINA CON TARJETA: ", 40, Helpers::Dinero($propinatarjetac), 20));
+$printer -> text($this->DosCol("PROPINA EN EFECTIVO: ", 40, Helpers::Dinero($propinatarjetae), 10));
 
 
+$printer -> text($this->DosCol("VENTA CON TARJETA: ", 40, Helpers::Dinero($tarjetacredito), 10));
 
-$printer -> text($this->DosCol("TOTAL DE VENTA: ", 40, Helpers::Dinero($counte), 20));
+$printer -> text($this->DosCol("PROPINA CON TARJETA: ", 40, Helpers::Dinero($propinatarjetac), 10));
+
+
+
+$printer -> text($this->DosCol("TOTAL DE VENTA: ", 40, Helpers::Dinero($counte), 10));
 
 
 
@@ -902,15 +951,15 @@ $printer -> text($this->DosCol("TOTAL DE VENTA: ", 40, Helpers::Dinero($counte),
     } $axy->close();
 
 
-$printer -> text($this->DosCol("TOTAL DE PROPINA: ", 40, Helpers::Dinero($propinas), 20));
+$printer -> text($this->DosCol("TOTAL DE PROPINA: ", 40, Helpers::Dinero($propinas), 10));
 
 
 
-$printer -> text($this->DosCol("TOTAL: ", 40, Helpers::Dinero($counte + $propinas), 20));
+$printer -> text($this->DosCol("TOTAL: ", 40, Helpers::Dinero($counte + $propinas), 10));
 
 
   
-$printer -> text("____________________________________________________________");
+$printer -> text("_______________________________________________________");
 $printer->feed();
 
 
@@ -923,10 +972,10 @@ foreach ($axy as $bxy) {
 
 
 
-$printer -> text($this->DosCol("TICKET ELIMINADOS: ", 40, $counte, 20));
+$printer -> text($this->DosCol("TICKET ELIMINADOS: ", 40, $counte, 10));
 
 
-$printer -> text("____________________________________________________________");
+$printer -> text("_______________________________________________________");
 $printer->feed();
 
 
@@ -952,20 +1001,20 @@ $printer -> text($this->DosCol("GASTOS REGISTRADOS: ", 40, Helpers::Dinero($gast
 $printer -> text($this->DosCol("REMESAS: ", 40, Helpers::Dinero($remesas), 10));
 
 
-$printer -> text("_______________________________________________________");
+$printer -> text("__________________________________________________");
 $printer->feed();
 
 
 
 
-$printer -> text($this->DosCol("DINERO EN APERTURA: ", 40, Helpers::Dinero($apertura), 20));
+$printer -> text($this->DosCol("DINERO EN APERTURA: ", 40, Helpers::Dinero($apertura), 10));
 
-$printer -> text($this->DosCol("EFECTIVO INGRESADO: ", 40, Helpers::Dinero($efectivo), 20));
+$printer -> text($this->DosCol("EFECTIVO INGRESADO: ", 40, Helpers::Dinero($efectivo), 10));
 
 
-$printer -> text($this->DosCol("DIFERENCIA: ", 40, Helpers::Dinero($diferencia), 20));
+$printer -> text($this->DosCol("DIFERENCIA: ", 40, Helpers::Dinero($diferencia), 10));
 
-$printer -> text("____________________________________________________________");
+$printer -> text("_______________________________________________________");
 $printer->feed();
 
 
@@ -976,11 +1025,11 @@ $printer->feed();
 
 $printer -> setJustification(Printer::JUSTIFY_LEFT);
 $printer -> setEmphasis(true);
-$printer -> text($this->Item("#", 'Cant', 'Descripcion', 'Total'));
+$printer -> text($this->Item('Cant', 'Descripcion', 'Total', null));
 $printer -> setEmphasis(false);
 
 
-$printer -> text("____________________________________________________________");
+$printer -> text("_______________________________________________________");
 $printer->feed();
 
 
@@ -1018,8 +1067,10 @@ $printer->close();
 
 
 
+
  public function EliminaOrden(){ 
   $this->EliminaOrdenCocina();
+  $this->EliminaOrdenBar();
  }
 
 
@@ -1044,7 +1095,7 @@ $a = $db->query("select ticket_borrado.cod as cod, ticket_borrado.hash as hash, 
 
  if($cantidadproductos > 0){
 
-$nombre_impresora = "LR2000";
+$nombre_impresora = "COCINA";
 
 $connector = new WindowsPrintConnector($nombre_impresora);
 $printer = new Printer($connector);
@@ -1066,7 +1117,7 @@ $printer -> setTextSize(1, 2);
 $printer -> setLineSpacing(80);
 
 
-$printer -> text("____________________________________________________________");
+$printer -> text("_______________________________________________________");
 $printer->feed();
 
 
@@ -1077,7 +1128,153 @@ $printer->feed();
 $printer -> text("MOTIVO: " . $motivo);
 $printer->feed();
 
-$printer -> text("____________________________________________________________");
+$printer -> text("_______________________________________________________");
+$printer->feed();
+
+
+    foreach ($a as $b) {
+//////
+// obtener cantidad (la cantidad se cuentan cuantos hay activos en controlcocina)
+$cont = $db->query("SELECT * FROM control_cocina WHERE edo = 3 and identificador = '".$b["hash"]."' and mesa = ".$_SESSION["mesa"]." and td = ".$_SESSION["td"]."");
+$canti_p = $cont->num_rows;
+$cont->close();
+///
+ 
+
+$printer -> text($canti_p . " - " .  $b["producto"]);
+$printer->feed();
+
+
+
+  $ap = $db->query("SELECT cod FROM control_cocina WHERE identificador = '".$b["hash"]."' and mesa = ".$_SESSION["mesa"]." and td = ".$_SESSION["td"]." and edo = 3");
+  foreach ($ap as $bp) {
+
+    $ar = $db->query("SELECT opcion FROM opciones_ticket WHERE identificador = '".$b["hash"]."' and mesa = ".$_SESSION["mesa"]." and td = ".$_SESSION["td"]." and cod = '".$bp["cod"]."'");
+    foreach ($ar as $br) {
+
+if ($r = $db->select("nombre", "opciones_name", "WHERE cod = '".$br["opcion"]."' and td = ".$_SESSION["td"]."")) {
+
+
+$printer -> text("* " . $r["nombre"]);
+$printer->feed();
+
+} unset($r); 
+
+    } $ar->close();
+
+} $ap->close();
+
+
+/// aqui debo actualizar para borrar si es ticket el que lleva el control de panel mostrar (paso a estado 2)
+if($_SESSION["config_o_ticket_pantalla"] == 2){
+    $cambio = array();
+    $cambio["edo"] = 4;
+    Helpers::UpdateId("control_cocina", $cambio, "identificador = '".$b["hash"]."' and td = ".$_SESSION["td"]."");
+}
+
+    }    $a->close();
+
+
+
+
+
+    if ($r = $db->select("llevar", "mesa", "WHERE mesa = '".$_SESSION["mesa"]."' and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
+        $llevar = $r["llevar"];
+    } unset($r);  
+
+if($llevar == 1){
+  $lleva = "COMER AQUI";
+}
+if($llevar == 2){
+  $lleva = "PARA LLEVAR";
+}
+if($llevar == 3){
+  $lleva = "DELIVERY";
+}
+
+
+
+
+$printer -> text($this->DosCol($lleva, 11, "MESA: " . $_SESSION['mesa'], 30));
+
+$printer -> text($this->DosCol(date("d-m-Y"), 11, date("H:i:s"), 30));
+
+$printer -> text("Cajero: " . $_SESSION['nombre']);
+$printer->feed();
+
+
+
+// nombre de mesa
+if ($r = $db->select("nombre", "mesa_nombre", "WHERE mesa = ".$_SESSION["mesa"]." and td = ".$_SESSION["td"]." and tx = ".$_SESSION["tx"]."")) { 
+    $nombre_mesa = $r["nombre"];
+} unset($r);  
+
+if($nombre_mesa != NULL){
+$printer -> text("Mesa: " . $nombre_mesa);
+}
+
+
+$printer->feed();
+$printer->cut();
+$printer->close();
+
+} // cantidad de productos
+
+
+}
+
+
+
+
+
+
+ public function EliminaOrdenBar(){ // imprime el el producto que se borro
+  $db = new dbConn();
+
+
+
+$a = $db->query("select ticket_borrado.cod as cod, ticket_borrado.hash as hash, ticket_borrado.cant as cant, ticket_borrado.producto as producto, control_cocina.cod as codigo 
+  FROM ticket_borrado, control_panel_mostrar, control_cocina 
+  WHERE ticket_borrado.mesa = '".$_SESSION["mesa"]."' and ticket_borrado.tx = ".$_SESSION["tx"]." and ticket_borrado.td = ".$_SESSION["td"]." and control_panel_mostrar.producto = ticket_borrado.cod and control_panel_mostrar.panel = 2 AND control_cocina.identificador = ticket_borrado.hash and control_cocina.edo = 3 and control_cocina.cod = ticket_borrado.cant");
+
+ $cantidadproductos = $a->num_rows;
+
+ if($cantidadproductos > 0){
+
+$nombre_impresora = "COCINA";
+
+$connector = new WindowsPrintConnector($nombre_impresora);
+$printer = new Printer($connector);
+$printer -> initialize();
+
+
+$printer -> setJustification(Printer::JUSTIFY_LEFT);
+
+$printer -> selectPrintMode(Printer::MODE_DOUBLE_HEIGHT);
+$printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+$printer -> text("ORDEN CANCELADA!");
+$printer -> selectPrintMode();
+$printer->feed();
+
+
+$printer -> setFont(Printer::FONT_B);
+
+$printer -> setTextSize(1, 2);
+$printer -> setLineSpacing(80);
+
+
+$printer -> text("_______________________________________________________");
+$printer->feed();
+
+
+    if ($r = $db->select("motivo", "mesa_borrado", "WHERE mesa='".$_SESSION["mesa"]."' and tx = ".$_SESSION["tx"]." and td = ".$_SESSION["td"]."")) { 
+        $motivo = $r["motivo"];
+    } unset($r); 
+
+$printer -> text("MOTIVO: " . $motivo);
+$printer->feed();
+
+$printer -> text("_______________________________________________________");
 $printer->feed();
 
 
@@ -1183,10 +1380,19 @@ $printer->close();
 
 
 
+
+
+
+
+
+
+
+
+
  public function Item($cant,  $name = '', $price = '', $total = '', $dollarSign = false)
     {
-        $rightCols = 10;
-        $leftCols = 42;
+        $rightCols = 8;
+        $leftCols = 38;
         if ($dollarSign) {
             $leftCols = $leftCols / 2 - $rightCols / 2;
         }
